@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://asadalizado.dev/sitemap.xml
