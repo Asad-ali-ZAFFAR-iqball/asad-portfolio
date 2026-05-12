@@ -140,40 +140,40 @@ The contact form currently simulates submission. To wire a real email service:
 
 ## Deployment
 
-### Vercel (Recommended)
+### 🚀 GitHub Pages (Configured & Ready)
 
+This portfolio is configured to deploy automatically to GitHub Pages with a custom domain.
+
+**👉 See [DEPLOYMENT.md](./DEPLOYMENT.md) for complete deployment instructions.**
+
+**Quick Start:**
 ```bash
-# Install Vercel CLI
-npm i -g vercel
+# 1. Push to GitHub
+git add .
+git commit -m "Deploy to GitHub Pages"
+git push origin main
 
-# Deploy
+# 2. Enable GitHub Pages in repository settings
+# 3. Configure DNS records for your custom domain
+# 4. Submit sitemap to Google Search Console
+```
+
+Your site will be live at: **https://asadalizaffar.dev**
+
+---
+
+### Alternative Deployment Options
+
+#### Vercel
+```bash
+npm i -g vercel
 vercel
 ```
 
-### Netlify
-
+#### Netlify
 ```bash
 npm run build
-# Deploy the .next folder
-```
-
-### Docker
-
-```dockerfile
-FROM node:18-alpine AS builder
-WORKDIR /app
-COPY . .
-RUN npm ci && npm run build
-
-FROM node:18-alpine AS runner
-WORKDIR /app
-ENV NODE_ENV production
-COPY --from=builder /app/.next/standalone ./
-COPY --from=builder /app/.next/static ./.next/static
-COPY --from=builder /app/public ./public
-
-EXPOSE 3000
-CMD ["node", "server.js"]
+# Deploy the ./out folder
 ```
 
 ---
