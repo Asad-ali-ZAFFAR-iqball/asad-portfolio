@@ -15,13 +15,11 @@ import { GlassCard } from "@/components/ui/GlassCard";
 import { cn, getStatusColor } from "@/lib/utils";
 import type { Project } from "@/types";
 
-const FILTERS = ["All", "Featured", "Fintech", "EdTech", "Healthcare", "DevOps", "Open Source"] as const;
+const FILTERS = ["All", "Multi-tenant", "AI", "Healthcare", "Backend", "Frontend"] as const;
 type Filter = (typeof FILTERS)[number];
 
 function filterProjects(projects: Project[], filter: Filter): Project[] {
   if (filter === "All") return projects;
-  if (filter === "Featured") return projects.filter((p) => p.featured);
-  if (filter === "Open Source") return projects.filter((p) => p.status === "Open Source");
   return projects.filter(
     (p) =>
       p.tags.some((t) => t.toLowerCase() === filter.toLowerCase()) ||
@@ -191,7 +189,7 @@ export function Projects() {
         <SectionHeader
           eyebrow="Featured Work"
           title="Products I've helped ship."
-          description="Selected projects spanning fintech, edtech, healthcare, and developer tooling — built for scale."
+          description="Products I worked on at Invictus Hub — spanning HR tech, healthcare, lead generation and multi-tenant admin tools."
         />
 
         {/* Filter tabs */}

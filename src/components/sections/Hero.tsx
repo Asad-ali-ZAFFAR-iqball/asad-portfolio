@@ -8,12 +8,12 @@ import { useTypingEffect } from "@/hooks/useTypingEffect";
 import { Button } from "@/components/ui/Button";
 
 const TYPING_WORDS = [
-  "Laravel Development",
+  "Laravel & PHP",
   "Vue.js & React.js",
-  "Full-Stack Engineering",
-  "Inertia.js & Livewire",
+  "TypeScript & Inertia.js",
+  "Queues, Horizon & Redis",
   "REST API Design",
-  "MySQL & PHP",
+  "Docker & CI/CD",
 ];
 
 const containerVariants = {
@@ -34,12 +34,12 @@ const itemVariants = {
 
 const SOCIAL_LINKS = [
   {
-    href: "https://www.linkedin.com/in/asad-ali-full-stack-developer",
+    href: personalInfo.socials.find((s) => s.platform === "LinkedIn")!.url,
     icon: <Linkedin size={18} />,
     label: "LinkedIn",
   },
   {
-    href: "https://github.com/asad-ali",
+    href: personalInfo.socials.find((s) => s.platform === "GitHub")!.url,
     icon: <Github size={18} />,
     label: "GitHub",
   },
@@ -109,7 +109,7 @@ export function Hero() {
             Hi, I&apos;m{" "}
             <span className="relative">
               <span className="bg-gradient-to-r from-brand-500 via-cyan-500 to-violet-500 bg-clip-text text-transparent">
-                Asad Ali Zaffar
+                {personalInfo.name}
               </span>
               {/* Underline accent */}
               <motion.span
@@ -124,7 +124,7 @@ export function Hero() {
           {/* Title */}
           <motion.div variants={itemVariants} className="mb-4">
             <p className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-700 dark:text-gray-300">
-              Full Stack Developer
+              {personalInfo.title}
             </p>
           </motion.div>
 
@@ -176,7 +176,7 @@ export function Hero() {
               size="lg"
               icon={<Download size={18} />}
               iconPosition="left"
-              download="Asad-Ali-Zafar-CV.pdf"
+              download="Asad-Ali-Zaffar-CV.pdf"
             >
               Download CV
             </Button>

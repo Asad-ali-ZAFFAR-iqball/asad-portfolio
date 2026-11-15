@@ -14,21 +14,22 @@ const inter = Inter({
 export const metadata: Metadata = {
   metadataBase: new URL("https://asadalizado.dev"),
   title: {
-    default: "Asad Ali Zaffar — Senior Software Engineer",
+    default: "Asad Ali Zaffar — Laravel Developer & Full-Stack Engineer",
     template: "%s | Asad Ali Zaffar",
   },
   description:
-    "Senior Software Engineer with 8+ years of experience architecting scalable cloud-native systems, full-stack applications, and fintech platforms. Based in Lahore, Pakistan.",
+    "Laravel Developer and Full-Stack Engineer with 3+ years of experience building scalable web applications with PHP, Laravel, TypeScript, Vue.js and React.js. Based in Lahore, Pakistan.",
   keywords: [
-    "Senior Software Engineer",
-    "Full-Stack Developer",
-    "Node.js",
-    "React",
+    "Laravel Developer",
+    "Full-Stack Engineer",
+    "PHP",
+    "Laravel",
+    "Vue.js",
+    "React.js",
     "TypeScript",
-    "Cloud Architecture",
-    "AWS",
-    "Kubernetes",
-    "Fintech",
+    "Inertia.js",
+    "Redis",
+    "Docker",
     "Pakistan",
     "Lahore",
     "Asad Ali Zaffar",
@@ -40,23 +41,23 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://asadalizado.dev",
     siteName: "Asad Ali Zaffar Portfolio",
-    title: "Asad Ali Zaffar — Senior Software Engineer",
+    title: "Asad Ali Zaffar — Laravel Developer & Full-Stack Engineer",
     description:
-      "Senior Software Engineer specializing in distributed systems, cloud architecture, and enterprise full-stack development.",
+      "Laravel Developer and Full-Stack Engineer building scalable web apps with PHP, Laravel, TypeScript, Vue.js and React.js.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Asad Ali Zaffar — Senior Software Engineer",
+        alt: "Asad Ali Zaffar — Laravel Developer & Full-Stack Engineer",
       },
     ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Asad Ali Zaffar — Senior Software Engineer",
+    title: "Asad Ali Zaffar — Laravel Developer & Full-Stack Engineer",
     description:
-      "Senior Software Engineer specializing in distributed systems, cloud architecture, and enterprise full-stack development.",
+      "Laravel Developer and Full-Stack Engineer building scalable web apps with PHP, Laravel, TypeScript, Vue.js and React.js.",
     images: ["/og-image.png"],
   },
   robots: {

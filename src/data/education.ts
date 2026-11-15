@@ -4,10 +4,10 @@ export const education: Education[] = [
   {
     id: "edu-1",
     institution: "The Islamia University of Bahawalpur",
-    degree: "Bachelor of Computer Sciences",
-    field: "Computer Software Engineering",
-    startYear: "2018",
-    endYear: "2022",
+    degree: "Bachelor of Science in Computer Science (BSCS)",
+    field: "Computer Programming & Specific Applications",
+    startYear: "Apr 2018",
+    endYear: "Mar 2022",
     description:
       "Studied core computer science fundamentals including software engineering, programming, databases, and web technologies. Built a strong foundation in problem-solving and software development practices.",
   },

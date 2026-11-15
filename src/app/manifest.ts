@@ -5,9 +5,9 @@ import type { MetadataRoute } from "next";
  */
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Asad Ali Zaffar — Senior Software Engineer",
+    name: "Asad Ali Zaffar — Laravel Developer & Full-Stack Engineer",
     short_name: "Asad.dev",
-    description: "Portfolio of Asad Ali Zaffar — Senior Software Engineer",
+    description: "Portfolio of Asad Ali Zaffar — Laravel Developer & Full-Stack Engineer",
     start_url: "/",
     display: "standalone",
     background_color: "#030712",
