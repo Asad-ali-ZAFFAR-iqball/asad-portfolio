@@ -22,12 +22,12 @@ export function Footer() {
           <div className="flex items-center gap-3">
             {[
               {
-                href: "https://www.linkedin.com/in/asad-ali-zaffar",
+                href: personalInfo.socials.find((s) => s.platform === "LinkedIn")!.url,
                 icon: <Linkedin size={18} />,
                 label: "LinkedIn",
               },
               {
-                href: "https://github.com/asad-ali-zaffar",
+                href: personalInfo.socials.find((s) => s.platform === "GitHub")!.url,
                 icon: <Github size={18} />,
                 label: "GitHub",
               },

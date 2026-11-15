@@ -131,7 +131,7 @@ export function EducationSection() {
         <SectionHeader
           eyebrow="Education & Certifications"
           title="Foundations and continuous growth."
-          description="Academic foundation complemented by industry-recognized certifications in cloud, DevOps, and agile engineering."
+          description="A computer science foundation from The Islamia University of Bahawalpur, complemented by hands-on training."
         />
 
         {/* Education */}

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Moon, Sun, Menu, X, Code2 } from "lucide-react";
 import { useTheme } from "next-themes";
 import { cn } from "@/lib/utils";
+import { personalInfo } from "@/data";
 import { useActiveSection } from "@/hooks/useActiveSection";
 import { useScrollProgress } from "@/hooks/useScrollProgress";
 
@@ -125,7 +126,7 @@ export function Navbar() {
 
             {/* Resume CTA */}
             <motion.a
-              href="/resume-asad-ali-zaffar.pdf"
+              href={personalInfo.resumeUrl}
               target="_blank"
               rel="noopener noreferrer"
               whileHover={{ scale: 1.03 }}
@@ -172,7 +173,7 @@ export function Navbar() {
                 ))}
                 <li className="pt-2 border-t border-gray-200 dark:border-white/10 mt-2">
                   <a
-                    href="/resume-asad-ali-zaffar.pdf"
+                    href={personalInfo.resumeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="flex items-center justify-center px-4 py-3 rounded-xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition-colors"

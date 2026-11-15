@@ -17,39 +17,39 @@ import { personalInfo, stats } from "@/data";
 const QUALITIES = [
   {
     icon: <Layers size={22} className="text-brand-500" />,
-    title: "Systems Architect",
+    title: "Laravel Specialist",
     description:
-      "Designs distributed, cloud-native systems that scale to millions of users while maintaining reliability, observability, and operational excellence.",
+      "Deep experience across the Laravel ecosystem — MVC, routing, middleware, Eloquent ORM, Queues & Jobs, Horizon and Inertia.js.",
   },
   {
     icon: <Users size={22} className="text-violet-500" />,
-    title: "Engineering Leader",
+    title: "Team Collaborator",
     description:
-      "Mentors engineers, drives technical strategy, and bridges the gap between product vision and engineering execution at the team level.",
+      "Works closely with teams on feature design, UI and code reviews using Git, Bitbucket, Jira and Slack.",
   },
   {
     icon: <Zap size={22} className="text-amber-500" />,
-    title: "Performance Obsessed",
+    title: "Performance Focused",
     description:
-      "Relentlessly optimizes for speed and efficiency — from database query plans to CDN edge caching and frontend bundle sizes.",
+      "Improves speed with Redis caching on high-traffic Eloquent queries and moves heavy work into queued background jobs.",
   },
   {
     icon: <Target size={22} className="text-emerald-500" />,
-    title: "Product-Minded",
+    title: "End-to-End Ownership",
     description:
-      "Writes code with business outcomes in mind. Translates ambiguous requirements into clean, maintainable technical implementations.",
+      "Owns features from database design through third-party integrations and production release.",
   },
   {
     icon: <BookOpen size={22} className="text-cyan-500" />,
-    title: "Continuous Learner",
+    title: "DevOps Minded",
     description:
-      "Holds 5 industry certifications across AWS, Kubernetes, and Scrum. Stays current with the evolving tech landscape and best practices.",
+      "Containerizes apps with Docker, sets up CI/CD with GitHub Actions, manages SSH deployments and monitors errors with Sentry.",
   },
   {
     icon: <Globe size={22} className="text-pink-500" />,
-    title: "Global Collaborator",
+    title: "Integration Expert",
     description:
-      "Worked in cross-cultural, globally distributed teams across Pakistan, US, and Europe. Expert in async-first communication and documentation.",
+      "Connects Laravel backends to Google, Facebook, Instagram, LinkedIn, Twilio, Google Maps and VONQ.",
   },
 ];
 
@@ -73,8 +73,8 @@ export function About() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="About Me"
-          title="Engineering excellence, delivered."
-          description="A senior engineer who brings clarity to complexity and momentum to ambitious products."
+          title="Scalable web apps, built end-to-end."
+          description="A Laravel and full-stack developer who ships clean, maintainable features from database to UI."
         />
 
         <div className="grid lg:grid-cols-2 gap-16 items-start">
@@ -86,39 +86,39 @@ export function About() {
                 <span className="font-semibold text-gray-900 dark:text-white">
                   {personalInfo.name}
                 </span>
-                , a Senior Software Engineer based in{" "}
+                , a Laravel Developer and Full-Stack Engineer based in{" "}
                 <span className="font-semibold text-gray-900 dark:text-white">
                   {personalInfo.location}
                 </span>{" "}
                 with{" "}
-                <span className="font-semibold text-brand-500">8+ years</span>{" "}
-                of experience architecting and delivering enterprise-grade software
-                across fintech, edtech, healthcare, and e-commerce.
+                <span className="font-semibold text-brand-500">3+ years</span>{" "}
+                of experience building scalable web applications across the
+                PHP/Laravel ecosystem and modern JavaScript frameworks (Vue.js,
+                React.js) using TypeScript.
               </p>
 
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-base">
-                I specialize in{" "}
+                I have hands-on experience with{" "}
                 <span className="font-semibold text-gray-900 dark:text-white">
-                  full-stack development
+                  Eloquent ORM, RESTful API design, Laravel Queues/Jobs
                 </span>{" "}
-                with deep expertise in cloud-native architectures, distributed
-                systems, and high-performance APIs. I&apos;ve led teams of up to 8
-                engineers and delivered systems processing{" "}
+                monitored via Laravel Horizon, Redis caching, Docker
+                containerization, and CI/CD pipelines with{" "}
                 <span className="font-semibold text-brand-500">
-                  10M+ daily transactions
+                  SSH-managed deployments
                 </span>
                 .
               </p>
 
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-base">
-                Beyond the code, I care deeply about{" "}
+                I&apos;m comfortable{" "}
                 <span className="font-semibold text-gray-900 dark:text-white">
-                  engineering culture
+                  owning features end-to-end
                 </span>{" "}
-                — mentoring engineers, championing best practices, and building
-                team environments where great software thrives. I believe the best
-                code is written by engineers who understand both the business and
-                the bytes.
+                — from database design through third-party integrations (Google,
+                Facebook, Twilio, Google Maps) and production release — on
+                products like an AI-based HR system, a healthcare monitoring
+                platform and a LinkedIn lead generation app.
               </p>
             </div>
 
@@ -143,8 +143,8 @@ export function About() {
             {/* Tech philosophy quote */}
             <blockquote className="relative pl-4 border-l-2 border-brand-500">
               <p className="italic text-gray-600 dark:text-gray-400 text-sm leading-relaxed">
-                &ldquo;The best architecture is the one that makes the next change
-                easier, not the one that anticipates every future requirement.&rdquo;
+                &ldquo;Clean, maintainable code and a responsive UI — from the
+                first migration to the production release.&rdquo;
               </p>
             </blockquote>
           </AnimatedSection>

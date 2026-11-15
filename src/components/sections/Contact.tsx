@@ -10,6 +10,7 @@ import {
   Linkedin,
   Github,
   MapPin,
+  Phone,
   Send,
   CheckCircle2,
   AlertCircle,
@@ -82,18 +83,26 @@ const CONTACT_INFO = [
   {
     icon: <Linkedin size={18} />,
     label: "LinkedIn",
-    value: "asad-ali-zaffar",
-    href: "https://www.linkedin.com/in/asad-ali-zaffar",
+    value: "asad-ali-full-stack-developer",
+    href: personalInfo.socials.find((s) => s.platform === "LinkedIn")!.url,
     color: "text-blue-500",
     bg: "bg-blue-500/10",
   },
   {
     icon: <Github size={18} />,
     label: "GitHub",
-    value: "asad-ali-zaffar",
-    href: "https://github.com/asad-ali-zaffar",
+    value: "Asad-ali-ZAFFAR-iqball",
+    href: personalInfo.socials.find((s) => s.platform === "GitHub")!.url,
     color: "text-gray-700 dark:text-gray-300",
     bg: "bg-gray-200 dark:bg-white/10",
+  },
+  {
+    icon: <Phone size={18} />,
+    label: "Phone",
+    value: personalInfo.phone,
+    href: `tel:${personalInfo.phone?.replace(/\s/g, "")}`,
+    color: "text-violet-500",
+    bg: "bg-violet-500/10",
   },
   {
     icon: <MapPin size={18} />,
@@ -303,12 +312,12 @@ export function Contact() {
                 </p>
               </div>
               <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-                Open to senior / lead engineering roles in product companies, 
-                high-growth startups, and remote-first teams. Interested in 
-                technically challenging problems at scale.
+                Open to Laravel and full-stack engineering roles with product
+                teams and remote-first companies — building scalable web
+                applications with PHP, Laravel, Vue.js, React.js and TypeScript.
               </p>
               <div className="mt-4 pt-4 border-t border-gray-200/80 dark:border-white/[0.06] flex flex-wrap gap-2">
-                {["Remote OK", "Full-time", "Leadership", "Fintech"].map((tag) => (
+                {["Remote OK", "Full-time", "Laravel", "Full-Stack"].map((tag) => (
                   <span
                     key={tag}
                     className="px-2.5 py-1 text-xs font-medium rounded-lg bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 border border-gray-200/80 dark:border-white/[0.06]"

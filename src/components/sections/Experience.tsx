@@ -228,7 +228,7 @@ export function Experience() {
         <SectionHeader
           eyebrow="Work History"
           title="Where I've made impact."
-          description="A track record of delivering complex engineering solutions at enterprise scale across multiple industries."
+          description="From internship to building multi-tenant SaaS products with Laravel, Vue.js, React.js and TypeScript."
         />
 
         <div className="relative">

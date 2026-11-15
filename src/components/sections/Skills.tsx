@@ -135,7 +135,7 @@ export function Skills() {
         <SectionHeader
           eyebrow="Technical Skills"
           title="The toolkit behind the craft."
-          description="Proficiency built through years of real-world production systems, not just side projects."
+          description="Backend, frontend, DevOps and integrations used daily on real-world production applications."
         />
 
         <div className="grid lg:grid-cols-[300px_1fr] gap-8">
