@@ -11,8 +11,8 @@
 
 ## Pages
 
-- [Portfolio](https://asad-ali-zaffar-iqball.github.io/asad-portfolio/): experience, skills, projects, education and contact
-- [CV (PDF)](https://asad-ali-zaffar-iqball.github.io/asad-portfolio/asad-ali-zaffar.pdf)
+- [Portfolio](https://asad-ali-zaffar-portfolio.netlify.app/): experience, skills, projects, education and contact
+- [CV (PDF)](https://asad-ali-zaffar-portfolio.netlify.app/asad-ali-zaffar.pdf)
 
 ## Experience
 

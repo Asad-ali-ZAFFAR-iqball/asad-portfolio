@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://asad-ali-zaffar-iqball.github.io/asad-portfolio/sitemap.xml
+Sitemap: https://asad-ali-zaffar-portfolio.netlify.app/sitemap.xml

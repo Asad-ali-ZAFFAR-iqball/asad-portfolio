@@ -65,11 +65,11 @@ function Field({
 
 const inputClasses = cn(
   "w-full px-4 py-3 rounded-xl text-sm transition-all duration-200",
-  "bg-gray-50/80 dark:bg-white/[0.04]",
-  "border border-gray-200 dark:border-white/[0.08]",
+  "bg-white/60 dark:bg-white/[0.04] backdrop-blur-md",
+  "border border-white/80 dark:border-white/[0.1] shadow-[inset_0_1px_2px_rgba(0,0,0,0.04)]",
   "text-gray-900 dark:text-white",
   "placeholder:text-gray-400 dark:placeholder:text-gray-500",
-  "focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500",
+  "focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 focus:shadow-[0_0_24px_-4px_rgb(var(--brand-500)/0.5)]",
   "hover:border-gray-300 dark:hover:border-white/15"
 );
 
@@ -147,18 +147,21 @@ export function Contact() {
     >
       {/* Background */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-white dark:from-gray-950 via-gray-50/50 dark:via-gray-900/50 to-white dark:to-gray-950" />
         <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.08, 0.15, 0.08] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
           className="absolute -bottom-32 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-brand-500/10 blur-3xl"
         />
+        {/* Floating glass shapes (CSS 3D, no WebGL needed) */}
+        <div aria-hidden className="glass-panel absolute top-24 right-[8%] h-24 w-24 rounded-3xl rotate-12 animate-float shadow-[0_0_60px_-10px_rgb(var(--violet-500)/0.6)]" />
+        <div aria-hidden className="glass-panel absolute bottom-28 left-[6%] h-16 w-16 rounded-2xl -rotate-12 animate-float [animation-delay:2s] shadow-[0_0_50px_-10px_rgb(var(--cyan-400)/0.6)]" />
+        <div aria-hidden className="glass-panel absolute top-1/2 left-[45%] h-10 w-10 rounded-full animate-float [animation-delay:4s] shadow-[0_0_40px_-8px_rgb(var(--brand-500)/0.7)] hidden lg:block" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="Get in Touch"
-          title="Let&apos;s build something great."
+          title="Let&apos;s Build Something Extraordinary."
           description="Whether you have an opportunity, a question, or just want to connect — my inbox is always open."
         />
 
@@ -256,6 +259,7 @@ export function Contact() {
                   <Button
                     type="submit"
                     variant="primary"
+                    className="bg-gradient-to-r from-brand-600 via-brand-500 to-violet-600 border-transparent"
                     size="md"
                     icon={<Send size={16} />}
                   >

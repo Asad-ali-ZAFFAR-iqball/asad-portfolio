@@ -1,3 +1,4 @@
+import colors from "tailwindcss/colors";
 import type { Config } from "tailwindcss";
 
 const config: Config = {
@@ -17,18 +18,21 @@ const config: Config = {
       },
       colors: {
         brand: {
-          50: "#eff6ff",
-          100: "#dbeafe",
-          200: "#bfdbfe",
-          300: "#93c5fd",
-          400: "#60a5fa",
-          500: "#3b82f6",
-          600: "#2563eb",
-          700: "#1d4ed8",
-          800: "#1e40af",
-          900: "#1e3a8a",
-          950: "#172554",
+          50: "rgb(var(--brand-50) / <alpha-value>)",
+          100: "rgb(var(--brand-100) / <alpha-value>)",
+          200: "rgb(var(--brand-200) / <alpha-value>)",
+          300: "rgb(var(--brand-300) / <alpha-value>)",
+          400: "rgb(var(--brand-400) / <alpha-value>)",
+          500: "rgb(var(--brand-500) / <alpha-value>)",
+          600: "rgb(var(--brand-600) / <alpha-value>)",
+          700: "rgb(var(--brand-700) / <alpha-value>)",
+          800: "rgb(var(--brand-800) / <alpha-value>)",
+          900: "rgb(var(--brand-900) / <alpha-value>)",
+          950: "rgb(var(--brand-950) / <alpha-value>)",
         },
+        // Theme-aware accents (dark: amber / fuchsia); other shades stay Tailwind defaults.
+        cyan: { ...colors.cyan, 400: "rgb(var(--cyan-400) / <alpha-value>)", 500: "rgb(var(--cyan-500) / <alpha-value>)" },
+        violet: { ...colors.violet, 500: "rgb(var(--violet-500) / <alpha-value>)", 600: "rgb(var(--violet-600) / <alpha-value>)" },
         accent: {
           cyan: "#06b6d4",
           violet: "#7c3aed",
@@ -82,9 +86,9 @@ const config: Config = {
         },
       },
       boxShadow: {
-        glow: "0 0 20px rgba(59, 130, 246, 0.3)",
-        "glow-lg": "0 0 40px rgba(59, 130, 246, 0.2)",
-        "glow-cyan": "0 0 20px rgba(6, 182, 212, 0.3)",
+        glow: "0 0 20px rgb(var(--brand-500) / 0.3)",
+        "glow-lg": "0 0 40px rgb(var(--brand-500) / 0.2)",
+        "glow-cyan": "0 0 20px rgb(var(--cyan-500) / 0.3)",
         glass: "0 8px 32px rgba(0, 0, 0, 0.12)",
         "glass-dark": "0 8px 32px rgba(0, 0, 0, 0.4)",
       },

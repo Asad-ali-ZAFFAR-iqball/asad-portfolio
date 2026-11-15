@@ -44,8 +44,8 @@ function TimelineItem({
           className={cn(
             "relative z-10 flex items-center justify-center w-10 h-10 rounded-full border-2 transition-colors duration-300",
             isPresent
-              ? "border-brand-500 bg-brand-500/10"
-              : "border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-900"
+              ? "border-brand-400 bg-brand-500/20 shadow-[0_0_24px_-2px_rgb(var(--brand-500)/0.7)]"
+              : "border-gray-300 dark:border-white/20 bg-white/80 dark:bg-gray-950/70 backdrop-blur shadow-[0_0_16px_-4px_rgb(var(--violet-500)/0.5)]"
           )}
         >
           <Briefcase
@@ -59,12 +59,12 @@ function TimelineItem({
 
         {/* Spine line */}
         {!isLast && (
-          <div className="flex-1 w-px bg-gradient-to-b from-gray-300 dark:from-gray-700 to-transparent mt-3" />
+          <div className="flex-1 w-0.5 mt-3 rounded-full bg-gradient-to-b from-brand-500/80 via-cyan-400/50 to-violet-500/10 shadow-[0_0_10px_rgb(var(--cyan-400)/0.45)]" />
         )}
       </div>
 
       {/* Card */}
-      <div className="flex-1 pb-12">
+      <div className="glass-panel glass-glow flex-1 mb-10 rounded-2xl p-5 sm:p-6">
         {/* Header */}
         <button
           onClick={() => setExpanded((p) => !p)}
@@ -221,7 +221,6 @@ export function Experience() {
     >
       {/* Background */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-50/50 via-white to-gray-50/50 dark:from-gray-900/50 dark:via-gray-950 dark:to-gray-900/50" />
       </div>
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">

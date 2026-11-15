@@ -8,6 +8,7 @@ import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Badge } from "@/components/ui/Badge";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/Button";
+import { TiltCard } from "@/components/ui/TiltCard";
 import { cn, getStatusColor, withBasePath } from "@/lib/utils";
 import type { Project } from "@/types";
 
@@ -69,6 +70,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
       transition={{ delay: (index % 3) * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="group relative"
     >
+      <TiltCard className="h-full">
       <GlassCard
         hover
         glow
@@ -194,6 +196,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           )}
         </div>
       </GlassCard>
+      </TiltCard>
     </motion.article>
   );
 }
@@ -211,7 +214,6 @@ export function Projects() {
     >
       {/* Background */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-50/50 via-white to-gray-50/50 dark:from-gray-900/30 dark:via-gray-950 dark:to-gray-900/30" />
         <motion.div
           animate={{ x: [0, -40, 0], y: [0, 30, 0] }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}

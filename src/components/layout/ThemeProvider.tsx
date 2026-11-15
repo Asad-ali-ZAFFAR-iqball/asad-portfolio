@@ -8,13 +8,13 @@ interface ThemeProviderProps {
 
 /**
  * Wraps the app in next-themes provider for dark/light mode support.
- * Defaults to light; a visitor's toggle choice is remembered by next-themes.
+ * Defaults to dark (the glass design's home); a visitor's toggle choice is remembered by next-themes.
  */
 export function ThemeProvider({ children }: ThemeProviderProps) {
   return (
     <NextThemesProvider
       attribute="class"
-      defaultTheme="light"
+      defaultTheme="dark"
       enableSystem
       disableTransitionOnChange={false}
     >

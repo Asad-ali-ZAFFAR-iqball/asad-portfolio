@@ -10,6 +10,7 @@ import {
   Globe,
 } from "lucide-react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
+import { Counter } from "@/components/ui/Counter";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { GlassCard } from "@/components/ui/GlassCard";
 import { personalInfo, stats } from "@/data";
@@ -62,7 +63,6 @@ export function About() {
     >
       {/* Background */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-white via-gray-50/50 to-white dark:from-gray-950 dark:via-gray-900/50 dark:to-gray-950" />
         <motion.div
           animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
@@ -79,7 +79,7 @@ export function About() {
 
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Bio text column */}
-          <AnimatedSection direction="right" className="space-y-6">
+          <AnimatedSection direction="right" className="glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
             <div className="prose prose-gray dark:prose-invert max-w-none">
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-base">
                 I&apos;m{" "}
@@ -127,10 +127,10 @@ export function About() {
               {stats.map((stat) => (
                 <div
                   key={stat.label}
-                  className="p-4 rounded-xl bg-gray-50/80 dark:bg-white/[0.03] border border-gray-200/80 dark:border-white/[0.06]"
+                  className="glass-panel glass-glow p-4 rounded-xl transition-transform duration-300 hover:-translate-y-1"
                 >
                   <p className="text-2xl font-bold text-gray-900 dark:text-white tabular-nums">
-                    {stat.value}
+                    <Counter value={stat.value} />
                     <span className="text-brand-500">{stat.suffix}</span>
                   </p>
                   <p className="text-sm text-gray-500 dark:text-gray-400 mt-0.5">

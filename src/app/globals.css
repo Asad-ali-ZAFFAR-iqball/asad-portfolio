@@ -6,16 +6,31 @@
 
 /* ─── Base resets & custom properties ─────────────────────────────────────── */
 @layer base {
+  /* Accent palette as RGB triplets; Tailwind's brand / cyan-400,500 / violet-500,600 read these.
+     Light: 60% Almond Milk (background) · 30% Dusty Teal (glass, secondary) · 10% Cherry Soda (accents) */
   :root {
-    --background: 0 0% 100%;
+    --background: 37 42% 89%;
     --foreground: 222 47% 11%;
     color-scheme: light;
+    /* brand = Cherry Soda; 500 is a touch deeper than the #d1294b swatch (400) so text passes 4.5:1 on Almond Milk */
+    --brand-50: 253 242 244; --brand-100: 252 228 233; --brand-200: 249 200 210; --brand-300: 243 157 176;
+    --brand-400: 209 41 75; --brand-500: 184 30 62; --brand-600: 160 25 54; --brand-700: 135 21 46;
+    --brand-800: 112 18 40; --brand-900: 90 15 33; --brand-950: 54 8 20;
+    --cyan-400: 91 143 139; --cyan-500: 63 107 104; /* Dusty Teal (#5b8f8b) and a deeper shade for icons/text */
+    --violet-500: 184 30 62; --violet-600: 160 25 54; /* Cherry Soda */
   }
 
+  /* Dark: 60% Smoked Oak (background) · 30% Fawn Suede (glass, secondary) · 10% Neon Iris (accents) */
   .dark {
-    --background: 222 47% 4%;
-    --foreground: 210 40% 98%;
+    --background: 30 18% 7%;
+    --foreground: 35 40% 96%;
     color-scheme: dark;
+    /* brand = Neon Iris (core #7b2ff7, glow #a78bfa) */
+    --brand-50: 245 240 255; --brand-100: 237 228 255; --brand-200: 221 204 255; --brand-300: 196 170 255;
+    --brand-400: 167 139 250; --brand-500: 123 47 247; --brand-600: 109 31 226; --brand-700: 91 24 189;
+    --brand-800: 74 22 150; --brand-900: 59 20 115; --brand-950: 36 12 72;
+    --cyan-400: 226 205 180; --cyan-500: 196 164 132; /* Fawn Suede */
+    --violet-500: 167 139 250; --violet-600: 139 92 246; /* Neon Iris glow */
   }
 
   * {
@@ -30,7 +45,7 @@
   }
 
   body {
-    @apply bg-white text-gray-900 dark:bg-gray-950 dark:text-white;
+    @apply bg-[#efe6d8] text-gray-900 dark:bg-[#14110e] dark:text-[#f6f1ea];
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     -webkit-font-smoothing: antialiased;
@@ -88,10 +103,6 @@
     @apply bg-gradient-to-r from-brand-500 via-cyan-500 to-violet-500 bg-clip-text text-transparent;
   }
 
-  .glass {
-    @apply bg-white/60 dark:bg-white/[0.03] backdrop-blur-sm border border-gray-200/80 dark:border-white/[0.06];
-  }
-
   .section-padding {
     @apply py-24 sm:py-32;
   }
@@ -126,6 +137,35 @@
 
 /* ─── Component styles ────────────────────────────────────────────────────── */
 @layer components {
+  /* Frosted glass surface: translucent fill, blur, hairline border, top-edge highlight and a soft shine. */
+  .glass-panel {
+    @apply relative isolate border backdrop-blur-xl backdrop-saturate-150;
+    @apply bg-[rgb(255_251_245/0.55)] border-[rgb(91_143_139/0.28)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.9),0_10px_40px_-12px_rgba(47,90,87,0.22)];
+    @apply dark:bg-[rgb(196_164_132/0.07)] dark:border-[rgb(196_164_132/0.18)] dark:shadow-[inset_0_1px_0_0_rgba(226,205,180,0.12),0_20px_50px_-20px_rgba(0,0,0,0.85)];
+  }
+
+  .glass-panel::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 38%);
+    opacity: 0.5;
+  }
+
+  .dark .glass-panel::before {
+    background: linear-gradient(135deg, rgba(226, 205, 180, 0.10) 0%, rgba(226, 205, 180, 0) 40%);
+    opacity: 1;
+  }
+
+  /* Hover glow for interactive glass */
+  .glass-glow {
+    @apply transition-[border-color,box-shadow] duration-300 hover:border-brand-400/50 dark:hover:border-cyan-400/40;
+    @apply hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12),0_0_0_1px_rgb(var(--brand-400)/0.15),0_20px_60px_-15px_rgb(var(--brand-500)/0.45)];
+  }
+
   /* Prose overrides for dark mode */
   .prose-invert h2,
   .prose-invert h3 {
@@ -136,4 +176,25 @@
   .link-underline {
     @apply relative inline-block after:absolute after:bottom-0 after:left-0 after:h-[1px] after:w-0 after:bg-brand-500 after:transition-all after:duration-300 hover:after:w-full;
   }
+}
+
+/* ─── Ambient lighting behind every section ──────────────────────────────── */
+.ambient-light {
+  position: fixed;
+  inset: 0;
+  z-index: -20;
+  pointer-events: none;
+  background:
+    radial-gradient(45rem 30rem at 85% -10%, rgba(91, 143, 139, 0.22), transparent 60%),
+    radial-gradient(40rem 30rem at -10% 40%, rgba(91, 143, 139, 0.14), transparent 60%),
+    radial-gradient(36rem 26rem at 70% 110%, rgba(209, 41, 75, 0.08), transparent 60%),
+    linear-gradient(180deg, #efe6d8 0%, #f5eee3 50%, #efe6d8 100%);
+}
+
+.dark .ambient-light {
+  background:
+    radial-gradient(50rem 34rem at 85% -10%, rgba(196, 164, 132, 0.16), transparent 60%),
+    radial-gradient(44rem 32rem at -10% 45%, rgba(123, 47, 247, 0.14), transparent 60%),
+    radial-gradient(44rem 30rem at 70% 110%, rgba(108, 99, 88, 0.30), transparent 60%),
+    linear-gradient(180deg, #14110e 0%, #2a241f 50%, #14110e 100%);
 }

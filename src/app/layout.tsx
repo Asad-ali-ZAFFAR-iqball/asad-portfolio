@@ -75,8 +75,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#030712" },
+    { media: "(prefers-color-scheme: light)", color: "#efe6d8" },
+    { media: "(prefers-color-scheme: dark)", color: "#14110e" },
   ],
   width: "device-width",
   initialScale: 1,
@@ -115,6 +115,7 @@ export default function RootLayout({
           Skip to content
         </a>
         <ThemeProvider>
+          <div className="ambient-light" aria-hidden />
           <Navbar />
           <main id="main-content">{children}</main>
           <Footer />

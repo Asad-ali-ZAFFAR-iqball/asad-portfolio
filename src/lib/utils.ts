@@ -86,8 +86,8 @@ export function getStatusColor(status: string): string {
 export const sleep = (ms: number): Promise<void> =>
   new Promise((resolve) => setTimeout(resolve, ms));
 
-/** Public URL of the deployed site (no trailing slash). Update together with basePath in next.config.js. */
-export const SITE_URL = "https://asad-ali-zaffar-iqball.github.io/asad-portfolio";
+/** Canonical public URL (no trailing slash). Netlify is primary; the GitHub Pages copy points its canonical here too. */
+export const SITE_URL = "https://asad-ali-zaffar-portfolio.netlify.app";
 
 /** Prefixes a /public path with the basePath — plain <a>/<img> paths don't get it automatically. */
 export const withBasePath = (path: string): string =>

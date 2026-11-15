@@ -1,5 +1,5 @@
-// GitHub Pages project site lives under /asad-portfolio. Set to "" once a custom domain is live.
-const basePath = "/asad-portfolio"; // also hard-coded in public/manifest.webmanifest, public/robots.txt, public/llms.txt and SITE_URL (src/lib/utils.ts)
+// Netlify (primary) serves from the root. The GitHub Pages workflow sets PAGES_BASE_PATH=/asad-portfolio.
+const basePath = process.env.PAGES_BASE_PATH ?? "";
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {

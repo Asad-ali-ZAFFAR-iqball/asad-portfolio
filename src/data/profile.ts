@@ -5,8 +5,7 @@ import { withBasePath } from "@/lib/utils";
 export const personalInfo: PersonalInfo = {
   name: "Asad Ali Zaffar",
   title: "Laravel Developer | Full-Stack Engineer",
-  tagline:
-    "Building scalable web applications with PHP, Laravel, TypeScript, Vue.js and React.js — from database design to production release.",
+  tagline: "Building Scalable Digital Experiences from Backend to Frontend.",
   bio: `Laravel and full-stack developer with 3+ years of experience building scalable web applications across the PHP/Laravel ecosystem and modern JavaScript frameworks (Vue.js, React.js) using TypeScript.
 
   Hands-on experience with Eloquent ORM, RESTful API design, Laravel Queues/Jobs monitored via Laravel Horizon, Redis caching, Docker containerization, and CI/CD pipeline setup with SSH-managed deployments.

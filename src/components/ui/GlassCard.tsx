@@ -26,16 +26,13 @@ export function GlassCard({
       onClick={onClick}
       whileHover={
         hover
-          ? { y: -4, boxShadow: "0 20px 40px rgba(59,130,246,0.12)" }
+          ? { y: -4 }
           : undefined
       }
       transition={{ duration: 0.25, ease: "easeOut" }}
       className={cn(
-        "rounded-2xl border",
-        "bg-white/60 dark:bg-white/[0.03]",
-        "border-gray-200/80 dark:border-white/[0.06]",
-        "backdrop-blur-sm",
-        glow && "hover:border-brand-500/30 hover:shadow-glow",
+        "glass-panel rounded-2xl",
+        glow && "glass-glow",
         hover && "cursor-pointer",
         className
       )}

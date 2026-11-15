@@ -1,11 +1,23 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { ArrowRight, Github, Linkedin, Mail, Download, MapPin, CheckCircle2 } from "lucide-react";
+import dynamic from "next/dynamic";
+import { motion, useReducedMotion } from "framer-motion";
+import { useInView } from "react-intersection-observer";
+import { useTheme } from "next-themes";
+import { ArrowRight, Github, Linkedin, Mail, MapPin, CheckCircle2, Sparkles } from "lucide-react";
 import { personalInfo, stats } from "@/data";
 import { useTypingEffect } from "@/hooks/useTypingEffect";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 import { Button } from "@/components/ui/Button";
+import { Counter } from "@/components/ui/Counter";
+
+// three.js is ~150 KB gzipped: load it only on the client, after first paint.
+// If the chunk fails to load (slow dev compile, flaky network) fall back to the CSS orbs instead of crashing the hero.
+const HeroScene = dynamic(
+  () => import("./HeroScene").catch(() => function NoScene() { return null; }),
+  { ssr: false }
+);
 
 const TYPING_WORDS = [
   "Laravel & PHP",
@@ -54,16 +66,27 @@ export function Hero() {
   const { text: typedText } = useTypingEffect({ words: TYPING_WORDS, typingSpeed: 75 });
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
+  const reduceMotion = useReducedMotion();
+  const isDesktop = useMediaQuery("(min-width: 768px) and (pointer: fine)");
+  const show3D = mounted && isDesktop && !reduceMotion;
+  const { ref: heroRef, inView } = useInView({ threshold: 0 });
+  const { resolvedTheme } = useTheme();
 
   return (
     <section
+      ref={heroRef}
       id="hero"
-      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-16"
+      className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden pt-28 pb-24"
       aria-label="Hero section"
     >
       {/* Animated mesh background */}
       <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-gray-50 via-white to-blue-50/30 dark:from-gray-950 dark:via-gray-900 dark:to-blue-950/20" />
+        {/* 3D scene (desktop, motion allowed); the CSS orbs below are the fallback everywhere else */}
+        {show3D && (
+          <div className="absolute inset-0">
+            <HeroScene active={inView} dark={resolvedTheme !== "light"} />
+          </div>
+        )}
         {/* Orbs */}
         <motion.div
           animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
@@ -81,7 +104,7 @@ export function Hero() {
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-cyan-500/5 blur-3xl"
         />
         {/* Grid */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(to_right,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:72px_72px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgb(var(--brand-500)/0.03)_1px,transparent_1px),linear-gradient(to_right,rgb(var(--brand-500)/0.03)_1px,transparent_1px)] bg-[size:72px_72px]" />
       </div>
 
       {/* Content */}
@@ -90,7 +113,7 @@ export function Hero() {
           variants={containerVariants}
           initial="hidden"
           animate={mounted ? "visible" : "hidden"}
-          className="flex flex-col items-center text-center"
+          className="glass-panel mx-auto max-w-5xl rounded-[2rem] px-5 py-12 sm:px-12 sm:py-16 flex flex-col items-center text-center"
         >
           {/* Status badge */}
           <motion.div variants={itemVariants} className="mb-6">
@@ -162,23 +185,23 @@ export function Hero() {
             className="flex flex-wrap items-center justify-center gap-3 mb-12"
           >
             <Button
-              href="#contact"
+              href="#projects"
               variant="primary"
               size="lg"
               icon={<ArrowRight size={18} />}
+              className="bg-gradient-to-r from-brand-600 via-brand-500 to-violet-600 border-transparent"
             >
-              Get in Touch
+              Explore My Work
             </Button>
             <Button
-              href={personalInfo.resumeUrl}
-              external
+              href="#contact"
               variant="secondary"
               size="lg"
-              icon={<Download size={18} />}
+              icon={<Sparkles size={18} />}
               iconPosition="left"
-              download="Asad-Ali-Zaffar-CV.pdf"
+              className="glass-panel glass-glow dark:bg-white/[0.06]"
             >
-              Download CV
+              Let&apos;s Connect
             </Button>
           </motion.div>
 
@@ -211,10 +234,10 @@ export function Hero() {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 1.1 + i * 0.1, duration: 0.5 }}
-                className="flex flex-col items-center p-5 rounded-2xl border border-gray-200/80 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.03] backdrop-blur-sm"
+                className="glass-panel glass-glow flex flex-col items-center p-5 rounded-2xl"
               >
                 <span className="text-3xl font-bold text-gray-900 dark:text-white tabular-nums">
-                  {stat.value}
+                  <Counter value={stat.value} />
                   <span className="text-brand-500">{stat.suffix}</span>
                 </span>
                 <span className="text-xs text-gray-500 dark:text-gray-400 text-center mt-1 leading-tight">

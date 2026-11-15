@@ -13,6 +13,7 @@ import {
 import { skillCategories } from "@/data";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { GlassCard } from "@/components/ui/GlassCard";
+import { TiltCard } from "@/components/ui/TiltCard";
 import { cn, getSkillLevelColor } from "@/lib/utils";
 import type { SkillCategory } from "@/types";
 
@@ -74,16 +75,14 @@ function CategoryCard({
       whileTap={{ scale: 0.97 }}
       onClick={onClick}
       className={cn(
-        "w-full text-left p-4 rounded-2xl border transition-all duration-200",
-        isActive
-          ? "border-brand-500/50 bg-brand-500/5 dark:bg-brand-500/10 shadow-glow"
-          : "border-gray-200/80 dark:border-white/[0.06] bg-white/60 dark:bg-white/[0.03] hover:border-brand-500/30"
+        "glass-panel glass-glow w-full text-left p-4 rounded-2xl transition-all duration-200",
+        isActive && "!border-brand-400/60 bg-brand-500/10 dark:bg-brand-500/[0.12] shadow-[0_0_30px_-6px_rgb(var(--brand-500)/0.55)]"
       )}
     >
       <div className="flex items-center gap-3">
         <div
           className={cn(
-            "p-2 rounded-xl text-white bg-gradient-to-br",
+            "p-2 rounded-xl text-white bg-gradient-to-br shadow-[0_0_18px_-2px_rgb(var(--brand-500)/0.6)]",
             category.color
           )}
         >
@@ -123,7 +122,6 @@ export function Skills() {
     >
       {/* Background */}
       <div className="absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-gradient-to-b from-white dark:from-gray-950 to-gray-50/30 dark:to-gray-900/30" />
         <motion.div
           animate={{ scale: [1, 1.2, 1], opacity: [0.05, 0.12, 0.05] }}
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
@@ -135,7 +133,7 @@ export function Skills() {
         <SectionHeader
           eyebrow="Technical Skills"
           title="The toolkit behind the craft."
-          description="Backend, frontend, DevOps and integrations used daily on real-world production applications."
+          description="Backend, frontend, database and DevOps tools used daily on real-world production applications."
         />
 
         <div className="grid lg:grid-cols-[300px_1fr] gap-8">
@@ -160,12 +158,13 @@ export function Skills() {
               exit={{ opacity: 0, x: -20 }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             >
-              <GlassCard className="p-8">
+              <TiltCard max={4} className="h-full">
+              <GlassCard className="p-8 h-full">
                 {/* Panel header */}
                 <div className="flex items-center gap-3 mb-8">
                   <div
                     className={cn(
-                      "p-2.5 rounded-xl text-white bg-gradient-to-br",
+                      "p-2.5 rounded-xl text-white bg-gradient-to-br shadow-[0_0_22px_-2px_rgb(var(--brand-500)/0.65)]",
                       currentCategory.color
                     )}
                   >
@@ -215,6 +214,7 @@ export function Skills() {
                   )}
                 </div>
               </GlassCard>
+              </TiltCard>
             </motion.div>
           </AnimatePresence>
         </div>
