@@ -170,7 +170,7 @@ export function Hero() {
               Get in Touch
             </Button>
             <Button
-              href="/asad-ali-zaffar.pdf"
+              href={personalInfo.resumeUrl}
               external
               variant="secondary"
               size="lg"

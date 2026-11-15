@@ -34,11 +34,13 @@ type ContactFormData = z.infer<typeof contactSchema>;
 
 // ─── Form field component ──────────────────────────────────────────────────────
 function Field({
+  id,
   label,
   error,
   children,
   required,
 }: {
+  id: string;
   label: string;
   error?: string;
   children: React.ReactNode;
@@ -46,7 +48,7 @@ function Field({
 }) {
   return (
     <div className="space-y-1.5">
-      <label className="block text-sm font-medium text-gray-700 dark:text-gray-300">
+      <label htmlFor={id} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
         {label}
         {required && <span className="text-brand-500 ml-0.5">*</span>}
       </label>
@@ -115,7 +117,7 @@ const CONTACT_INFO = [
 ];
 
 export function Contact() {
-  const [submitState, setSubmitState] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [submitState, setSubmitState] = useState<"idle" | "success">("idle");
 
   const {
     register,
@@ -126,14 +128,15 @@ export function Contact() {
     resolver: zodResolver(contactSchema),
   });
 
-  const onSubmit = async (data: ContactFormData) => {
-    setSubmitState("loading");
-    // Simulate API call — replace with your actual email service (Resend, EmailJS, etc.)
-    await new Promise((r) => setTimeout(r, 1800));
-    console.log("Form data:", data);
+  // Static site with no backend: hand the message to the visitor's email app, addressed to me.
+  const onSubmit = (data: ContactFormData) => {
+    const body = `${data.message}
+
+— ${data.name} (${data.email})`;
+    window.location.href = `mailto:${personalInfo.email}?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(body)}`;
     setSubmitState("success");
     reset();
-    setTimeout(() => setSubmitState("idle"), 6000);
+    setTimeout(() => setSubmitState("idle"), 15000);
   };
 
   return (
@@ -173,19 +176,25 @@ export function Contact() {
                 </div>
                 <div>
                   <h3 className="font-bold text-xl text-gray-900 dark:text-white mb-2">
-                    Message Sent!
+                    Almost there!
                   </h3>
                   <p className="text-gray-600 dark:text-gray-400">
-                    Thanks for reaching out. I&apos;ll get back to you within 24 hours.
+                    Your email app should now be open with the message ready — just press send.
+                    If nothing opened, email me at{" "}
+                    <a href={`mailto:${personalInfo.email}`} className="text-brand-600 dark:text-brand-400 underline">
+                      {personalInfo.email}
+                    </a>
+                    .
                   </p>
                 </div>
               </motion.div>
             ) : (
               <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
                 <div className="grid sm:grid-cols-2 gap-5">
-                  <Field label="Full Name" error={errors.name?.message} required>
+                  <Field id="contact-name" label="Full Name" error={errors.name?.message} required>
                     <input
                       {...register("name")}
+                      id="contact-name"
                       type="text"
                       placeholder="John Doe"
                       autoComplete="name"
@@ -196,9 +205,10 @@ export function Contact() {
                     />
                   </Field>
 
-                  <Field label="Email Address" error={errors.email?.message} required>
+                  <Field id="contact-email" label="Email Address" error={errors.email?.message} required>
                     <input
                       {...register("email")}
+                      id="contact-email"
                       type="email"
                       placeholder="john@example.com"
                       autoComplete="email"
@@ -210,9 +220,10 @@ export function Contact() {
                   </Field>
                 </div>
 
-                <Field label="Subject" error={errors.subject?.message} required>
+                <Field id="contact-subject" label="Subject" error={errors.subject?.message} required>
                   <input
                     {...register("subject")}
+                    id="contact-subject"
                     type="text"
                     placeholder="Collaboration opportunity at Acme Corp"
                     className={cn(
@@ -222,9 +233,10 @@ export function Contact() {
                   />
                 </Field>
 
-                <Field label="Message" error={errors.message?.message} required>
+                <Field id="contact-message" label="Message" error={errors.message?.message} required>
                   <textarea
                     {...register("message")}
+                    id="contact-message"
                     rows={6}
                     placeholder="Tell me about your project, opportunity, or question..."
                     className={cn(
@@ -245,7 +257,6 @@ export function Contact() {
                     type="submit"
                     variant="primary"
                     size="md"
-                    isLoading={submitState === "loading"}
                     icon={<Send size={16} />}
                   >
                     Send Message

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { ArrowLeft, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
+import { withBasePath } from "@/lib/utils";
 
 /**
  * Custom 404 page with brand-consistent design.
@@ -40,7 +41,7 @@ export default function NotFound() {
         </p>
 
         <Button
-          href="/"
+          href={withBasePath("/")}
           variant="primary"
           size="md"
           icon={<ArrowLeft size={16} />}

@@ -1,4 +1,6 @@
 import type { PersonalInfo, Stat } from "@/types";
+import { projects } from "./projects";
+import { withBasePath } from "@/lib/utils";
 
 export const personalInfo: PersonalInfo = {
   name: "Asad Ali Zaffar",
@@ -14,7 +16,7 @@ export const personalInfo: PersonalInfo = {
   email: "contactwithasad226@gmail.com",
   phone: "+92 308 3962198",
   openToWork: true,
-  resumeUrl: "/asad-ali-zaffar.pdf",
+  resumeUrl: withBasePath("/asad-ali-zaffar.pdf"),
   socials: [
     {
       platform: "LinkedIn",
@@ -36,7 +38,7 @@ export const personalInfo: PersonalInfo = {
 
 export const stats: Stat[] = [
   { label: "Years of Experience", value: "3", suffix: "+", icon: "calendar" },
-  { label: "Key Products Shipped", value: "4", suffix: "", icon: "briefcase" },
+  { label: "Projects Built", value: String(projects.length), suffix: "", icon: "briefcase" },
   { label: "Third-party Integrations", value: "10", suffix: "+", icon: "users" },
   { label: "Technologies", value: "25", suffix: "+", icon: "star" },
 ];

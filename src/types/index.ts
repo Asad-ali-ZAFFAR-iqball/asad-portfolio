@@ -76,7 +76,7 @@ export interface Project {
   liveUrl?: string;
   caseStudyUrl?: string;
   featured: boolean;
-  status: ProjectStatus;
+  status?: ProjectStatus; // omit when not verified
   metrics?: string[];
   year: string;
 }

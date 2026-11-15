@@ -1,0 +1,36 @@
+# Asad Ali Zaffar — Laravel Developer & Full-Stack Engineer
+
+> Laravel and full-stack developer based in Lahore, Pakistan, with 3+ years of experience building web applications with PHP, Laravel, Vue.js, React.js, Inertia.js and TypeScript. Open to work.
+
+## Contact
+
+- Email: contactwithasad226@gmail.com
+- Phone: +92 308 3962198
+- LinkedIn: https://www.linkedin.com/in/asad-ali-full-stack-developer
+- GitHub: https://github.com/Asad-ali-ZAFFAR-iqball
+
+## Pages
+
+- [Portfolio](https://asad-ali-zaffar-iqball.github.io/asad-portfolio/): experience, skills, projects, education and contact
+- [CV (PDF)](https://asad-ali-zaffar-iqball.github.io/asad-portfolio/asad-ali-zaffar.pdf)
+
+## Experience
+
+- Laravel Developer, Invictus Hub (Dec 2023 – Present)
+- Remote Developer, Freelance (Aug 2022 – Nov 2023)
+- Laravel Developer (Assistant Programmer), KFUEIT (Nov 2022 – Aug 2023)
+
+## Projects
+
+- Keen — multi-tenant, AI-based HR system (Laravel, Vue.js, Inertia.js): https://app.keen.cc
+- Josoor Admin — multi-tenant admin application (Next.js, TypeScript)
+- TrueLeads — LinkedIn lead generation backend (Laravel, Inertia.js, React.js): https://trueleads.com
+- MedLink — healthcare recall and monitoring (Laravel, Vue 3, Inertia.js): https://medlink.co.uk
+- GTrack — asset tracking dashboard (Laravel, Vue 3, APIs)
+- RapidMeds — UK online healthcare service (PHP, jQuery): https://rapidmeds.co.uk/
+- Zamen (Laravel, jQuery): https://www.zamen.co.uk/
+- Keynests (Laravel, jQuery)
+- KFUEIT CMS (Laravel, jQuery)
+- Government Graduate College for Women, Rahim Yar Khan (Laravel): https://ggcwryk.edu.pk/
+- KFUEIT Guest House (Laravel, jQuery)
+- Polio from DC Office (Laravel, jQuery)

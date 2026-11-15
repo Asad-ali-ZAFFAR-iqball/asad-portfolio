@@ -2,42 +2,71 @@
 
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  ExternalLink,
-  Github,
-  ArrowUpRight,
-  Star,
-} from "lucide-react";
+import { ExternalLink, Github, Star, ChevronDown } from "lucide-react";
 import { projects } from "@/data";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { Badge } from "@/components/ui/Badge";
 import { GlassCard } from "@/components/ui/GlassCard";
-import { cn, getStatusColor } from "@/lib/utils";
+import { Button } from "@/components/ui/Button";
+import { cn, getStatusColor, withBasePath } from "@/lib/utils";
 import type { Project } from "@/types";
 
-const FILTERS = ["All", "Multi-tenant", "AI", "Healthcare", "Backend", "Frontend"] as const;
+const FILTERS = ["All", "Invictus Hub", "Freelance", "KFUEIT", "Healthcare"] as const;
 type Filter = (typeof FILTERS)[number];
 
 function filterProjects(projects: Project[], filter: Filter): Project[] {
   if (filter === "All") return projects;
-  return projects.filter(
-    (p) =>
-      p.tags.some((t) => t.toLowerCase() === filter.toLowerCase()) ||
-      p.title.toLowerCase().includes(filter.toLowerCase())
+  return projects.filter((p) => p.tags.includes(filter));
+}
+
+function ProjectThumbnail({ project }: { project: Project }) {
+  if (project.image) {
+    return (
+      // eslint-disable-next-line @next/next/no-img-element -- static export; images are pre-optimized WebP
+      <img
+        src={withBasePath(project.image)}
+        alt={`Screenshot of ${project.title}`}
+        width={800}
+        height={400}
+        loading="lazy"
+        decoding="async"
+        className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
+      />
+    );
+  }
+  const initials = project.title
+    .split(/\s+/)
+    .filter((w) => /^[A-Za-z]/.test(w))
+    .slice(0, 2)
+    .map((w) => w[0])
+    .join("")
+    .toUpperCase();
+  // Placeholder is labelled so it is never mistaken for a real screenshot.
+  return (
+    <div
+      role="img"
+      aria-label={`${project.title}: no preview available`}
+      className="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-brand-500/15 via-cyan-500/10 to-violet-500/15 dark:from-brand-500/20 dark:via-cyan-500/10 dark:to-violet-500/20"
+    >
+      <span className="text-4xl font-bold tracking-tight text-brand-600/70 dark:text-brand-400/70 transition-transform duration-500 group-hover:scale-110">
+        {initials}
+      </span>
+      <span className="text-[11px] font-medium uppercase tracking-widest text-gray-500 dark:text-gray-400">
+        Preview unavailable
+      </span>
+    </div>
   );
 }
 
 function ProjectCard({ project, index }: { project: Project; index: number }) {
-  const [hovered, setHovered] = useState(false);
+  const hasDetails = Boolean(project.longDescription) || project.technologies.length > 6;
 
   return (
     <motion.article
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
-      transition={{ delay: index * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-      onHoverStart={() => setHovered(true)}
-      onHoverEnd={() => setHovered(false)}
+      transition={{ delay: (index % 3) * 0.08, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
       className="group relative"
     >
       <GlassCard
@@ -45,22 +74,28 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         glow
         className="relative overflow-hidden h-full flex flex-col"
       >
-        {/* Top accent gradient */}
-        <div className="h-1 w-full bg-gradient-to-r from-brand-500 via-cyan-500 to-violet-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        {/* Thumbnail */}
+        <div className="relative aspect-[2/1] overflow-hidden border-b border-gray-200/80 dark:border-white/[0.06]">
+          <ProjectThumbnail project={project} />
+          {/* Top accent gradient */}
+          <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-brand-500 via-cyan-500 to-violet-500 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+        </div>
 
         <div className="p-6 flex flex-col flex-1">
-          {/* Header row */}
-          <div className="flex items-start justify-between gap-4 mb-4">
-            <div className="flex-1 min-w-0">
+          {/* Header */}
+          <div className="mb-4">
+            {(project.status || project.featured) && (
               <div className="flex items-center gap-2 mb-1 flex-wrap">
-                <span
-                  className={cn(
-                    "text-xs font-semibold px-2.5 py-0.5 rounded-full border",
-                    getStatusColor(project.status)
-                  )}
-                >
-                  {project.status}
-                </span>
+                {project.status && (
+                  <span
+                    className={cn(
+                      "text-xs font-semibold px-2.5 py-0.5 rounded-full border",
+                      getStatusColor(project.status)
+                    )}
+                  >
+                    {project.status}
+                  </span>
+                )}
                 {project.featured && (
                   <span className="inline-flex items-center gap-1 text-xs font-semibold text-amber-500">
                     <Star size={11} className="fill-amber-500" />
@@ -68,39 +103,13 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
                   </span>
                 )}
               </div>
-              <h3 className="font-bold text-gray-900 dark:text-white text-base leading-snug group-hover:text-brand-500 dark:group-hover:text-brand-400 transition-colors">
-                {project.title}
-              </h3>
-              <p className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">
-                {project.subtitle} · {project.year}
-              </p>
-            </div>
-
-            {/* Links */}
-            <div className="flex items-center gap-1 flex-shrink-0">
-              {project.githubUrl && (
-                <a
-                  href={project.githubUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="GitHub"
-                  className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
-                >
-                  <Github size={16} />
-                </a>
-              )}
-              {project.liveUrl && (
-                <a
-                  href={project.liveUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="Live site"
-                  className="p-2 rounded-lg text-gray-500 dark:text-gray-400 hover:text-brand-500 dark:hover:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-500/5 transition-colors"
-                >
-                  <ExternalLink size={16} />
-                </a>
-              )}
-            </div>
+            )}
+            <h3 className="font-bold text-gray-900 dark:text-white text-base leading-snug group-hover:text-brand-500 dark:group-hover:text-brand-400 transition-colors">
+              {project.title}
+            </h3>
+            <p className="text-xs text-gray-500 dark:text-gray-400 font-medium mt-0.5">
+              {project.subtitle} · {project.year}
+            </p>
           </div>
 
           {/* Description */}
@@ -134,31 +143,56 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
 
           {/* Tech stack */}
           <div className="pt-4 border-t border-gray-200/80 dark:border-white/[0.06]">
-            <div className="flex flex-wrap gap-1.5">
+            <ul className="flex flex-wrap gap-1.5" aria-label="Technologies">
               {project.technologies.slice(0, 6).map((tech) => (
-                <span
+                <li
                   key={tech}
                   className="px-2 py-0.5 text-xs font-mono text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-white/5 rounded"
                 >
                   {tech}
-                </span>
+                </li>
               ))}
               {project.technologies.length > 6 && (
-                <span className="px-2 py-0.5 text-xs font-mono text-gray-400 dark:text-gray-500">
+                <li className="px-2 py-0.5 text-xs font-mono text-gray-400 dark:text-gray-500">
                   +{project.technologies.length - 6} more
-                </span>
+                </li>
+              )}
+            </ul>
+          </div>
+
+          {/* Details */}
+          {hasDetails && (
+            <details className="group/details mt-4 text-sm">
+              <summary className="inline-flex items-center gap-1 cursor-pointer list-none font-medium text-brand-600 dark:text-brand-400 hover:text-brand-500 rounded focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 [&::-webkit-details-marker]:hidden">
+                View details
+                <ChevronDown size={14} className="transition-transform duration-200 group-open/details:rotate-180" />
+              </summary>
+              <div className="mt-3 space-y-3 text-gray-600 dark:text-gray-400 leading-relaxed">
+                {project.longDescription && <p>{project.longDescription}</p>}
+                <p>
+                  <span className="font-semibold text-gray-900 dark:text-white">Technologies: </span>
+                  {project.technologies.join(", ")}
+                </p>
+              </div>
+            </details>
+          )}
+
+          {/* Actions */}
+          {(project.liveUrl || project.githubUrl) && (
+            <div className="flex flex-wrap gap-2 mt-5">
+              {project.liveUrl && (
+                <Button href={project.liveUrl} external size="sm" icon={<ExternalLink size={14} />}>
+                  Live Demo<span className="sr-only"> of {project.title} (opens in new tab)</span>
+                </Button>
+              )}
+              {project.githubUrl && (
+                <Button href={project.githubUrl} external size="sm" variant="secondary" icon={<Github size={14} />}>
+                  GitHub<span className="sr-only"> repository for {project.title} (opens in new tab)</span>
+                </Button>
               )}
             </div>
-          </div>
+          )}
         </div>
-
-        {/* Hover reveal arrow */}
-        <motion.div
-          animate={{ opacity: hovered ? 1 : 0, x: hovered ? 0 : 4 }}
-          className="absolute bottom-4 right-4"
-        >
-          <ArrowUpRight size={18} className="text-brand-500" />
-        </motion.div>
       </GlassCard>
     </motion.article>
   );
@@ -189,7 +223,7 @@ export function Projects() {
         <SectionHeader
           eyebrow="Featured Work"
           title="Products I've helped ship."
-          description="Products I worked on at Invictus Hub — spanning HR tech, healthcare, lead generation and multi-tenant admin tools."
+          description="Products and websites I've built at Invictus Hub, at KFUEIT and as a freelancer — spanning HR tech, healthcare, lead generation and education."
         />
 
         {/* Filter tabs */}
@@ -200,6 +234,7 @@ export function Projects() {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
               onClick={() => setActiveFilter(filter)}
+              aria-pressed={activeFilter === filter}
               className={cn(
                 "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
                 activeFilter === filter
