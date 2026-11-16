@@ -1,5 +1,6 @@
-import { Github, Linkedin, Mail, Code2, ArrowUp } from "lucide-react";
+import { Github, Linkedin, Mail, Code2, ArrowUp, Heart } from "lucide-react";
 import { personalInfo } from "@/data";
+import { withBasePath } from "@/lib/utils";
 
 export function Footer() {
   const year = new Date().getFullYear();
@@ -42,7 +43,7 @@ export function Footer() {
                 href={href}
                 target={href.startsWith("mailto:") ? undefined : "_blank"}
                 rel="noopener noreferrer"
-                aria-label={label}
+                aria-label={href.startsWith("mailto:") ? label : `${label} (opens in new tab)`}
                 className="p-2 rounded-lg text-gray-500 hover:text-brand-500 dark:text-gray-400 dark:hover:text-brand-400 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
               >
                 {icon}
@@ -52,14 +53,15 @@ export function Footer() {
 
           {/* Copyright */}
           <p className="text-sm text-gray-500 dark:text-gray-400">
-            © {year} {personalInfo.name}. Built with Next.js & ❤️
+            © {year} {personalInfo.name}. Built with Next.js &{" "}
+            <Heart size={14} aria-label="love" className="inline -mt-0.5 fill-current text-brand-500" />
           </p>
         </div>
       </div>
 
       {/* Back to top */}
       <a
-        href="#hero"
+        href={`${withBasePath("/")}#hero`}
         aria-label="Back to top"
         className="absolute right-6 -top-5 flex items-center justify-center w-10 h-10 rounded-full bg-brand-600 hover:bg-brand-500 text-on-brand shadow-glow transition-colors"
       >

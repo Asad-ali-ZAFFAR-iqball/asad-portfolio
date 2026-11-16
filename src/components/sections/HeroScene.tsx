@@ -1,14 +1,14 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import type { Group, Mesh } from "three";
 import { AdditiveBlending, BufferAttribute, BufferGeometry, Color } from "three";
 
 // Per-theme colours, matching the CSS accent variables in globals.css.
 const PALETTES = {
-  light: { shapes: ["#295255", "#577877", "#162623", "#577877", "#295255", "#577877"], a: "#295255", b: "#577877", c: "#162623" },
-  dark: { shapes: ["#A8DCE7", "#272B3B", "#FFFFFF", "#A8DCE7", "#272B3B", "#A8DCE7"], a: "#A8DCE7", b: "#272B3B", c: "#FFFFFF" },
+  light: { shapes: ["#295255", "#577877", "#162623", "#577877", "#295255", "#577877"], a: "#295255", b: "#577877", c: "#577877" },
+  dark: { shapes: ["#A8DCE7", "#272B3B", "#FFFFFF", "#A8DCE7", "#272B3B", "#A8DCE7"], a: "#A8DCE7", b: "#FFFFFF", c: "#A8DCE7" },
 };
 type Palette = (typeof PALETTES)["dark"];
 
@@ -60,20 +60,28 @@ function GlassShape({ kind, position, scale, tint, seed }: {
 }
 
 function Particles({ palette, count = 700 }: { palette: Palette; count?: number }) {
+  // Positions are random once; a theme switch only recolours, so particles don't jump.
+  const positions = useMemo(() => {
+    const pos = new Float32Array(count * 3);
+    for (let i = 0; i < count; i++) {
+      pos.set([(Math.random() - 0.5) * 18, (Math.random() - 0.5) * 10, (Math.random() - 0.5) * 8 - 2], i * 3);
+    }
+    return pos;
+  }, [count]);
   const geometry = useMemo(() => {
     const g = new BufferGeometry();
-    const pos = new Float32Array(count * 3);
     const col = new Float32Array(count * 3);
     const colors = [new Color(palette.a), new Color(palette.b), new Color(palette.c)];
     for (let i = 0; i < count; i++) {
-      pos.set([(Math.random() - 0.5) * 18, (Math.random() - 0.5) * 10, (Math.random() - 0.5) * 8 - 2], i * 3);
       const c = colors[i % colors.length];
       col.set([c.r, c.g, c.b], i * 3);
     }
-    g.setAttribute("position", new BufferAttribute(pos, 3));
+    g.setAttribute("position", new BufferAttribute(positions, 3));
     g.setAttribute("color", new BufferAttribute(col, 3));
     return g;
-  }, [count, palette]);
+  }, [count, palette, positions]);
+  // Free the GPU buffers of the previous geometry (theme switch, unmount).
+  useEffect(() => () => geometry.dispose(), [geometry]);
   const ref = useRef<Group>(null);
   useFrame((_, dt) => {
     if (ref.current) ref.current.rotation.y += dt * 0.02;

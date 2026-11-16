@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/layout/ThemeProvider";
 import { Navbar } from "@/components/layout/Navbar";
 import { Footer } from "@/components/layout/Footer";
@@ -7,10 +7,19 @@ import { personalInfo } from "@/data";
 import { SITE_URL, withBasePath } from "@/lib/utils";
 import "./globals.css";
 
+// Self-hosted variable fonts (one file each, every weight): no render-blocking Google Fonts request.
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
   display: "swap",
+});
+
+// Mono is only used for small accents, so don't let it compete with Inter for the first paint.
+const mono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-mono",
+  display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -74,10 +83,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#F0F5F7" },
-    { media: "(prefers-color-scheme: dark)", color: "#101422" },
-  ],
+  // Dark is the default theme, so the browser UI matches it instead of the OS setting.
+  themeColor: "#101422",
   width: "device-width",
   initialScale: 1,
 };
@@ -101,7 +108,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${mono.variable}`} suppressHydrationWarning>
       <body className="min-h-screen antialiased">
         <script
           type="application/ld+json"

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface SectionHeaderProps {
@@ -26,7 +26,7 @@ export function SectionHeader({
   return (
     <div className={cn(isCenter ? "text-center" : "text-left", "mb-16", className)}>
       {eyebrow && (
-        <motion.span
+        <m.span
           initial={{ opacity: 0, y: 10 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -35,9 +35,9 @@ export function SectionHeader({
         >
           <span className="w-1.5 h-1.5 rounded-full bg-brand-400 animate-pulse-slow" />
           {eyebrow}
-        </motion.span>
+        </m.span>
       )}
-      <motion.h2
+      <m.h2
         initial={{ opacity: 0, y: 16 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -45,9 +45,9 @@ export function SectionHeader({
         className="text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight text-gray-900 dark:text-white"
       >
         {title}
-      </motion.h2>
+      </m.h2>
       {description && (
-        <motion.p
+        <m.p
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
@@ -58,7 +58,7 @@ export function SectionHeader({
           )}
         >
           {description}
-        </motion.p>
+        </m.p>
       )}
     </div>
   );

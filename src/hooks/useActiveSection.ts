@@ -7,7 +7,7 @@ import { useState, useEffect, useRef } from "react";
  * Uses IntersectionObserver for performance.
  */
 export function useActiveSection(sectionIds: string[]): string {
-  const [activeSection, setActiveSection] = useState<string>(sectionIds[0] ?? "");
+  const [activeSection, setActiveSection] = useState<string>("");
   const observerRef = useRef<IntersectionObserver | null>(null);
 
   useEffect(() => {

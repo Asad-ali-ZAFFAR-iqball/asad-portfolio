@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useMotionTemplate, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
+import { m, useMotionTemplate, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface TiltCardProps {
@@ -41,7 +41,7 @@ export function TiltCard({ children, className, max = 7 }: TiltCardProps) {
 
   return (
     <div className={cn("[perspective:1200px]", className)}>
-      <motion.div
+      <m.div
         ref={ref}
         onPointerMove={onMove}
         onPointerLeave={onLeave}
@@ -50,13 +50,13 @@ export function TiltCard({ children, className, max = 7 }: TiltCardProps) {
       >
         {children}
         {!reduce && (
-          <motion.div
+          <m.div
             aria-hidden
             style={{ background: glare }}
             className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover/tilt:opacity-100"
           />
         )}
-      </motion.div>
+      </m.div>
     </div>
   );
 }

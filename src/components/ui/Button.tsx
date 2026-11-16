@@ -1,7 +1,7 @@
 "use client";
 
 import { forwardRef } from "react";
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 type ButtonVariant = "primary" | "secondary" | "ghost" | "outline";
@@ -56,7 +56,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     const sizes: Record<ButtonSize, string> = {
       sm: "text-sm px-4 py-2 h-9",
       md: "text-sm px-5 py-2.5 h-11",
-      lg: "text-base px-7 py-3.5 h-13",
+      lg: "text-base px-7 py-3.5 h-14",
     };
 
     const classes = cn(base, variants[variant], sizes[size], className);
@@ -80,7 +80,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     if (href) {
       return (
-        <motion.a
+        <m.a
           href={href}
           target={external ? "_blank" : undefined}
           rel={external ? "noopener noreferrer" : undefined}
@@ -90,21 +90,21 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
           className={classes}
         >
           {content}
-        </motion.a>
+        </m.a>
       );
     }
 
     return (
-      <motion.button
+      <m.button
         ref={ref}
         whileHover={{ scale: disabled ? 1 : 1.02 }}
         whileTap={{ scale: disabled ? 1 : 0.97 }}
         className={classes}
         disabled={disabled || isLoading}
-        {...(props as React.ComponentProps<typeof motion.button>)}
+        {...(props as React.ComponentProps<typeof m.button>)}
       >
         {content}
-      </motion.button>
+      </m.button>
     );
   }
 );

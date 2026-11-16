@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence } from "framer-motion";
 import { ExternalLink, Github, Star, ChevronDown } from "lucide-react";
 import { projects } from "@/data";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -63,7 +63,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
   const hasDetails = Boolean(project.longDescription) || project.technologies.length > 6;
 
   return (
-    <motion.article
+    <m.article
       initial={{ opacity: 0, y: 24 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
@@ -197,7 +197,7 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
         </div>
       </GlassCard>
       </TiltCard>
-    </motion.article>
+    </m.article>
   );
 }
 
@@ -214,7 +214,7 @@ export function Projects() {
     >
       {/* Background */}
       <div className="absolute inset-0 -z-10">
-        <motion.div
+        <m.div
           animate={{ x: [0, -40, 0], y: [0, 30, 0] }}
           transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
           className="absolute -right-24 top-1/3 w-[500px] h-[500px] rounded-full bg-cyan-500/5 blur-3xl"
@@ -231,7 +231,7 @@ export function Projects() {
         {/* Filter tabs */}
         <div className="flex flex-wrap gap-2 mb-10 justify-center">
           {FILTERS.map((filter) => (
-            <motion.button
+            <m.button
               key={filter}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
@@ -245,13 +245,13 @@ export function Projects() {
               )}
             >
               {filter}
-            </motion.button>
+            </m.button>
           ))}
         </div>
 
         {/* Project grid */}
         <AnimatePresence mode="wait">
-          <motion.div
+          <m.div
             key={activeFilter}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -262,7 +262,7 @@ export function Projects() {
             {filtered.map((project, i) => (
               <ProjectCard key={project.id} project={project} index={i} />
             ))}
-          </motion.div>
+          </m.div>
         </AnimatePresence>
 
         {filtered.length === 0 && (

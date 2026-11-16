@@ -7,24 +7,28 @@ interface UseTypingEffectOptions {
   typingSpeed?: number;
   deletingSpeed?: number;
   delayBetween?: number;
+  /** false freezes the text where it is (paused, off screen or reduced motion) */
+  enabled?: boolean;
 }
 
 /**
  * Produces a typing + deleting animation cycling through a list of words.
+ * Starts on the first word, fully typed, so server-rendered HTML already shows real text.
  */
 export function useTypingEffect({
   words,
   typingSpeed = 80,
   deletingSpeed = 50,
   delayBetween = 1800,
+  enabled = true,
 }: UseTypingEffectOptions): { text: string; isDeleting: boolean } {
-  const [text, setText] = useState("");
+  const [text, setText] = useState(words[0] ?? "");
   const [wordIndex, setWordIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
-  const [isPaused, setIsPaused] = useState(false);
+  const [isPaused, setIsPaused] = useState(true);
 
   useEffect(() => {
-    if (!words.length) return;
+    if (!words.length || !enabled) return;
 
     const currentWord = words[wordIndex % words.length];
 
@@ -55,7 +59,7 @@ export function useTypingEffect({
     );
 
     return () => clearTimeout(timeout);
-  }, [text, wordIndex, isDeleting, isPaused, words, typingSpeed, deletingSpeed, delayBetween]);
+  }, [text, wordIndex, isDeleting, isPaused, words, typingSpeed, deletingSpeed, delayBetween, enabled]);
 
   return { text, isDeleting };
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Server, Layers, Plug, Rocket } from "lucide-react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -41,21 +41,21 @@ export function Services() {
 
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {SERVICES.map(({ icon: Icon, title, description }, i) => (
-            <motion.div
+            <m.div
               key={title}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: i * 0.08, duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
             >
-              <GlassCard glow className="p-6 h-full transition-transform duration-300 hover:-translate-y-1">
-                <div className="mb-5 inline-flex p-3 rounded-xl bg-brand-600 text-on-brand shadow-[0_6px_16px_-6px_rgb(41_82_85/0.45)] dark:shadow-none dark:bg-brand-500/10 dark:text-brand-400">
+              <GlassCard glow className="p-6 h-full transition-[transform,border-color,box-shadow] duration-300 hover:-translate-y-1">
+                <div className="mb-5 inline-flex p-3 rounded-xl icon-tile">
                   <Icon size={22} />
                 </div>
                 <h3 className="font-bold text-gray-900 dark:text-white mb-2">{title}</h3>
                 <p className="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{description}</p>
               </GlassCard>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useEffect, useState } from "react";
+import { m, AnimatePresence } from "framer-motion";
 import {
   MapPin,
   Calendar,
@@ -26,11 +26,15 @@ function TimelineItem({
   isLast: boolean;
 }) {
   const [expanded, setExpanded] = useState(index === 0);
+  const detailsId = `experience-details-${index}`;
 
   const isPresent = exp.endDate === "Present";
+  // Static HTML is built once; recompute "Present" durations in the browser after hydration.
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => setNow(new Date()), []);
 
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, x: -20 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, margin: "-60px" }}
@@ -65,12 +69,9 @@ function TimelineItem({
 
       {/* Card */}
       <div className="glass-panel glass-glow flex-1 mb-10 rounded-2xl p-5 sm:p-6">
-        {/* Header */}
-        <button
-          onClick={() => setExpanded((p) => !p)}
-          className="w-full text-left group"
-          aria-expanded={expanded}
-        >
+        {/* Header: clicking anywhere toggles for mouse users; the real control is the button below,
+            so the heading and company link are not nested inside a button (invalid HTML). */}
+        <div onClick={() => setExpanded((p) => !p)} className="w-full text-left group cursor-pointer">
           <div className="flex flex-wrap items-start justify-between gap-3 mb-2">
             <div>
               <div className="flex items-center gap-2 mb-1 flex-wrap">
@@ -94,7 +95,8 @@ function TimelineItem({
                     className="inline-flex items-center gap-1 text-brand-500 dark:text-brand-400 font-semibold hover:underline"
                   >
                     {exp.company}
-                    <ExternalLink size={13} />
+                    <ExternalLink size={13} aria-hidden />
+                    <span className="sr-only">(opens in new tab)</span>
                   </a>
                 ) : (
                   <span className="font-semibold text-brand-500 dark:text-brand-400">
@@ -110,7 +112,8 @@ function TimelineItem({
                 {formatDateRange(exp.startDate, exp.endDate)}
               </span>
               <span className="text-xs text-gray-400 dark:text-gray-500 font-mono">
-                {calculateDuration(exp.startDate, exp.endDate)}
+                {/* "\u00a0" holds the line height until the client computes the "Present" duration */}
+                {isPresent && !now ? "\u00a0" : calculateDuration(exp.startDate, exp.endDate, now ?? undefined)}
               </span>
             </div>
           </div>
@@ -127,22 +130,35 @@ function TimelineItem({
           </p>
 
           {/* Expand toggle */}
-          <div className="flex items-center gap-1.5 mt-3 text-xs font-medium text-brand-500 dark:text-brand-400">
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation(); // the header div would toggle it back
+              setExpanded((p) => !p);
+            }}
+            aria-expanded={expanded}
+            aria-controls={detailsId}
+            // py-1/-mb-1 lifts the tap target to 24px (WCAG 2.5.8) without moving anything visually
+            className="flex items-center gap-1.5 mt-2 py-1 -mb-1 text-xs font-medium text-brand-500 dark:text-brand-400"
+          >
             <span>{expanded ? "Show less" : "View details"}</span>
-            <motion.span
+            <span className="sr-only"> for {exp.role} at {exp.company}</span>
+            <m.span
+              aria-hidden
               animate={{ rotate: expanded ? 180 : 0 }}
               transition={{ duration: 0.2 }}
             >
               <ChevronDown size={14} />
-            </motion.span>
-          </div>
-        </button>
+            </m.span>
+          </button>
+        </div>
 
         {/* Expandable content */}
         <AnimatePresence initial={false}>
           {expanded && (
-            <motion.div
+            <m.div
               key="details"
+              id={detailsId}
               initial={{ height: 0, opacity: 0 }}
               animate={{ height: "auto", opacity: 1 }}
               exit={{ height: 0, opacity: 0 }}
@@ -204,11 +220,11 @@ function TimelineItem({
                   </div>
                 </div>
               </div>
-            </motion.div>
+            </m.div>
           )}
         </AnimatePresence>
       </div>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -219,10 +235,6 @@ export function Experience() {
       className="relative py-24 sm:py-32"
       aria-label="Experience section"
     >
-      {/* Background */}
-      <div className="absolute inset-0 -z-10">
-      </div>
-
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="Work History"

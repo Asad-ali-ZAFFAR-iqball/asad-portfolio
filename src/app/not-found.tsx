@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { ArrowLeft, Code2 } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { withBasePath } from "@/lib/utils";
@@ -11,7 +11,7 @@ import { withBasePath } from "@/lib/utils";
 export default function NotFound() {
   return (
     <div className="min-h-screen flex flex-col items-center justify-center px-4 bg-white dark:bg-gray-950">
-      <motion.div
+      <m.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
@@ -49,7 +49,7 @@ export default function NotFound() {
         >
           Back to Home
         </Button>
-      </motion.div>
+      </m.div>
     </div>
   );
 }

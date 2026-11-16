@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { Mail, UserCheck } from "lucide-react";
 import { references } from "@/data";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -22,7 +22,7 @@ export function Testimonials() {
 
         <div className="grid sm:grid-cols-2 gap-6 max-w-3xl mx-auto">
           {references.map((ref, i) => (
-            <motion.div
+            <m.div
               key={ref.id}
               initial={{ opacity: 0, y: 16 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -32,7 +32,7 @@ export function Testimonials() {
             >
               <GlassCard className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-xl bg-brand-600 text-on-brand shadow-[0_6px_16px_-6px_rgb(41_82_85/0.45)] dark:shadow-none dark:bg-brand-500/10 dark:text-brand-400 flex-shrink-0">
+                  <div className="p-3 rounded-xl icon-tile flex-shrink-0">
                     <UserCheck size={22} />
                   </div>
                   <div className="min-w-0">
@@ -50,7 +50,7 @@ export function Testimonials() {
                   </div>
                 </div>
               </GlassCard>
-            </motion.div>
+            </m.div>
           ))}
         </div>
       </div>

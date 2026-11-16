@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
@@ -15,6 +15,8 @@ import {
   CheckCircle2,
   AlertCircle,
   Clock,
+  Copy,
+  RotateCcw,
 } from "lucide-react";
 import { SectionHeader } from "@/components/ui/SectionHeader";
 import { GlassCard } from "@/components/ui/GlassCard";
@@ -23,11 +25,12 @@ import { personalInfo } from "@/data";
 import { cn } from "@/lib/utils";
 
 // ─── Form schema ───────────────────────────────────────────────────────────────
+// trim() so whitespace-only input fails; max() keeps the mailto URL short enough for mail apps.
 const contactSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Please enter a valid email address"),
-  subject: z.string().min(5, "Subject must be at least 5 characters"),
-  message: z.string().min(20, "Message must be at least 20 characters"),
+  name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name must be 100 characters or less"),
+  email: z.string().trim().email("Please enter a valid email address").max(200, "Email must be 200 characters or less"),
+  subject: z.string().trim().min(5, "Subject must be at least 5 characters").max(150, "Subject must be 150 characters or less"),
+  message: z.string().trim().min(20, "Message must be at least 20 characters").max(1500, "Message must be 1500 characters or less"),
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
@@ -50,12 +53,12 @@ function Field({
     <div className="space-y-1.5">
       <label htmlFor={id} className="block text-sm font-medium text-gray-700 dark:text-gray-300">
         {label}
-        {required && <span className="text-brand-500 ml-0.5">*</span>}
+        {required && <span aria-hidden className="text-brand-500 ml-0.5">*</span>}
       </label>
       {children}
       {error && (
-        <p className="flex items-center gap-1.5 text-xs text-red-500">
-          <AlertCircle size={12} />
+        <p id={`${id}-error`} role="alert" className="flex items-center gap-1.5 text-xs font-semibold text-gray-900 dark:text-white">
+          <AlertCircle size={12} aria-hidden />
           {error}
         </p>
       )}
@@ -64,14 +67,25 @@ function Field({
 }
 
 const inputClasses = cn(
-  "w-full px-4 py-3 rounded-xl text-sm transition-all duration-200",
+  "w-full px-4 py-3 rounded-xl text-sm transition-all duration-200 scroll-mt-28", // scroll-mt: keep focused fields clear of the fixed navbar
   "bg-white/60 dark:bg-white/[0.04] backdrop-blur-md",
-  "border border-white/80 dark:border-white/[0.1] shadow-[inset_0_1px_2px_rgba(22,38,35,0.04)]",
+  "border border-gray-200 dark:border-white/[0.1] shadow-[inset_0_1px_2px_rgba(22,38,35,0.04)]",
   "text-gray-900 dark:text-white",
   "placeholder:text-gray-400 dark:placeholder:text-gray-500",
   "focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 focus:shadow-[0_0_24px_-4px_rgb(var(--brand-500)/0.5)]",
   "hover:border-gray-300 dark:hover:border-white/15"
 );
+
+// Errors use the darkest palette ink so they never look like the teal focus state.
+const inputErrorClasses =
+  "border-gray-900 dark:border-white focus:border-gray-900 dark:focus:border-white focus:ring-gray-900/20 dark:focus:ring-white/30";
+
+/** Ties an input to its error message for screen readers. */
+const fieldA11y = (id: string, error?: string) => ({
+  "aria-required": true,
+  "aria-invalid": !!error,
+  "aria-describedby": error ? `${id}-error` : undefined,
+});
 
 const CONTACT_INFO = [
   {
@@ -117,26 +131,43 @@ const CONTACT_INFO = [
 ];
 
 export function Contact() {
-  const [submitState, setSubmitState] = useState<"idle" | "success">("idle");
+  // We can't know whether a mail app opened, so the form is never cleared automatically.
+  const [status, setStatus] = useState<"idle" | "opened" | "copied" | "copyFailed">("idle");
+  const reduceMotion = useReducedMotion();
 
   const {
     register,
     handleSubmit,
     reset,
+    getValues,
     formState: { errors },
   } = useForm<ContactFormData>({
     resolver: zodResolver(contactSchema),
   });
 
-  // Static site with no backend: hand the message to the visitor's email app, addressed to me.
-  const onSubmit = (data: ContactFormData) => {
-    const body = `${data.message}
+  const emailBody = (data: ContactFormData) => `${data.message}
 
 — ${data.name} (${data.email})`;
-    window.location.href = `mailto:${personalInfo.email}?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(body)}`;
-    setSubmitState("success");
+
+  // Static site with no backend: hand the message to the visitor's email app, addressed to me.
+  const onSubmit = (data: ContactFormData) => {
+    window.location.href = `mailto:${personalInfo.email}?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(emailBody(data))}`;
+    setStatus("opened");
+  };
+
+  const copyMessage = async () => {
+    const data = getValues();
+    try {
+      await navigator.clipboard.writeText(`To: ${personalInfo.email}\nSubject: ${data.subject}\n\n${emailBody(data)}`);
+      setStatus("copied");
+    } catch {
+      setStatus("copyFailed");
+    }
+  };
+
+  const clearForm = () => {
     reset();
-    setTimeout(() => setSubmitState("idle"), 15000);
+    setStatus("idle");
   };
 
   return (
@@ -147,15 +178,17 @@ export function Contact() {
     >
       {/* Background */}
       <div className="absolute inset-0 -z-10">
-        <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.08, 0.15, 0.08] }}
+        <m.div
+          animate={reduceMotion ? undefined : { scale: [1, 1.2, 1], opacity: [0.08, 0.15, 0.08] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
-          className="absolute -bottom-32 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-brand-500/10 blur-3xl"
+          // Centre via motion x: an animated scale overwrites Tailwind's translate class and the orb jumps
+          style={{ x: "-50%" }}
+          className="absolute -bottom-32 left-1/2 w-[600px] h-[600px] rounded-full bg-brand-500/10 blur-3xl"
         />
         {/* Floating glass shapes (CSS 3D, no WebGL needed) */}
-        <div aria-hidden className="glass-panel absolute top-24 right-[8%] h-24 w-24 rounded-3xl rotate-12 animate-float shadow-[0_0_60px_-10px_rgb(var(--violet-500)/0.6)]" />
-        <div aria-hidden className="glass-panel absolute bottom-28 left-[6%] h-16 w-16 rounded-2xl -rotate-12 animate-float [animation-delay:2s] shadow-[0_0_50px_-10px_rgb(var(--cyan-400)/0.6)]" />
-        <div aria-hidden className="glass-panel absolute top-1/2 left-[45%] h-10 w-10 rounded-full animate-float [animation-delay:4s] shadow-[0_0_40px_-8px_rgb(var(--brand-500)/0.7)] hidden lg:block" />
+        <div aria-hidden className="hidden dark:block glass-panel absolute top-24 right-[8%] h-24 w-24 rounded-3xl rotate-12 animate-float shadow-[0_0_60px_-10px_rgb(var(--violet-500)/0.6)]" />
+        <div aria-hidden className="hidden dark:block glass-panel absolute bottom-28 left-[6%] h-16 w-16 rounded-2xl -rotate-12 animate-float [animation-delay:2s] shadow-[0_0_50px_-10px_rgb(var(--cyan-400)/0.6)]" />
+        <div aria-hidden className="glass-panel absolute top-1/2 left-[45%] h-10 w-10 rounded-full animate-float [animation-delay:4s] shadow-[0_0_40px_-8px_rgb(var(--brand-500)/0.7)] hidden dark:lg:block" />
       </div>
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -168,42 +201,19 @@ export function Contact() {
         <div className="grid lg:grid-cols-[1fr_400px] gap-12 items-start">
           {/* Contact form */}
           <GlassCard className="p-8">
-            {submitState === "success" ? (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                className="flex flex-col items-center justify-center py-12 text-center gap-4"
-              >
-                <div className="w-16 h-16 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                  <CheckCircle2 size={32} className="text-emerald-500" />
-                </div>
-                <div>
-                  <h3 className="font-bold text-xl text-gray-900 dark:text-white mb-2">
-                    Almost there!
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    Your email app should now be open with the message ready — just press send.
-                    If nothing opened, email me at{" "}
-                    <a href={`mailto:${personalInfo.email}`} className="text-brand-600 dark:text-brand-400 underline">
-                      {personalInfo.email}
-                    </a>
-                    .
-                  </p>
-                </div>
-              </motion.div>
-            ) : (
               <form onSubmit={handleSubmit(onSubmit)} noValidate className="space-y-5">
                 <div className="grid sm:grid-cols-2 gap-5">
                   <Field id="contact-name" label="Full Name" error={errors.name?.message} required>
                     <input
                       {...register("name")}
+                      {...fieldA11y("contact-name", errors.name?.message)}
                       id="contact-name"
                       type="text"
                       placeholder="John Doe"
                       autoComplete="name"
                       className={cn(
                         inputClasses,
-                        errors.name && "border-red-400 focus:border-red-400 focus:ring-red-400/30"
+                        errors.name && inputErrorClasses
                       )}
                     />
                   </Field>
@@ -211,13 +221,14 @@ export function Contact() {
                   <Field id="contact-email" label="Email Address" error={errors.email?.message} required>
                     <input
                       {...register("email")}
+                      {...fieldA11y("contact-email", errors.email?.message)}
                       id="contact-email"
                       type="email"
                       placeholder="john@example.com"
                       autoComplete="email"
                       className={cn(
                         inputClasses,
-                        errors.email && "border-red-400 focus:border-red-400 focus:ring-red-400/30"
+                        errors.email && inputErrorClasses
                       )}
                     />
                   </Field>
@@ -226,12 +237,13 @@ export function Contact() {
                 <Field id="contact-subject" label="Subject" error={errors.subject?.message} required>
                   <input
                     {...register("subject")}
+                    {...fieldA11y("contact-subject", errors.subject?.message)}
                     id="contact-subject"
                     type="text"
                     placeholder="Collaboration opportunity at Acme Corp"
                     className={cn(
                       inputClasses,
-                      errors.subject && "border-red-400 focus:border-red-400 focus:ring-red-400/30"
+                      errors.subject && inputErrorClasses
                     )}
                   />
                 </Field>
@@ -239,13 +251,14 @@ export function Contact() {
                 <Field id="contact-message" label="Message" error={errors.message?.message} required>
                   <textarea
                     {...register("message")}
+                    {...fieldA11y("contact-message", errors.message?.message)}
                     id="contact-message"
                     rows={6}
                     placeholder="Tell me about your project, opportunity, or question..."
                     className={cn(
                       inputClasses,
                       "resize-none",
-                      errors.message && "border-red-400 focus:border-red-400 focus:ring-red-400/30"
+                      errors.message && inputErrorClasses
                     )}
                   />
                 </Field>
@@ -266,8 +279,40 @@ export function Contact() {
                     Send Message
                   </Button>
                 </div>
+
+                {/* Status after "Send": the form keeps its data until the visitor clears it */}
+                <div role="status" aria-live="polite">
+                  {status !== "idle" && (
+                    <div className="mt-2 rounded-xl border border-brand-500/30 bg-brand-500/5 p-4 text-sm text-gray-700 dark:text-gray-300">
+                      <p className="flex items-start gap-2 font-medium text-gray-900 dark:text-white">
+                        {status === "copyFailed" ? (
+                          <AlertCircle size={16} aria-hidden className="mt-0.5 flex-shrink-0" />
+                        ) : (
+                          <CheckCircle2 size={16} aria-hidden className="mt-0.5 flex-shrink-0 text-brand-500" />
+                        )}
+                        {status === "opened" && "Your email app should open with this message. Press send there to deliver it."}
+                        {status === "copied" && `Message copied. Paste it into an email to ${personalInfo.email}.`}
+                        {status === "copyFailed" && "Couldn't copy automatically. Your message is still in the form, so you can select and copy it."}
+                      </p>
+                      <p className="mt-2">
+                        Nothing opened? Copy the message or email me directly at{" "}
+                        <a href={`mailto:${personalInfo.email}`} className="text-brand-600 dark:text-brand-400 underline">
+                          {personalInfo.email}
+                        </a>
+                        .
+                      </p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        <Button type="button" variant="secondary" size="sm" icon={<Copy size={14} />} iconPosition="left" onClick={copyMessage}>
+                          Copy message
+                        </Button>
+                        <Button type="button" variant="ghost" size="sm" icon={<RotateCcw size={14} />} iconPosition="left" onClick={clearForm}>
+                          Clear form
+                        </Button>
+                      </div>
+                    </div>
+                  )}
+                </div>
               </form>
-            )}
           </GlassCard>
 
           {/* Contact info panel */}
@@ -275,7 +320,7 @@ export function Contact() {
             {/* Info cards */}
             <div className="space-y-3">
               {CONTACT_INFO.map(({ icon, label, value, href, color, bg }) => (
-                <motion.div
+                <m.div
                   key={label}
                   whileHover={{ x: 4 }}
                   transition={{ duration: 0.2 }}
@@ -314,7 +359,7 @@ export function Contact() {
                       </div>
                     </div>
                   )}
-                </motion.div>
+                </m.div>
               ))}
             </div>
 

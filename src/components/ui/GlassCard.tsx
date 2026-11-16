@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface GlassCardProps {
@@ -22,7 +22,7 @@ export function GlassCard({
   onClick,
 }: GlassCardProps) {
   return (
-    <motion.div
+    <m.div
       onClick={onClick}
       whileHover={
         hover
@@ -33,11 +33,10 @@ export function GlassCard({
       className={cn(
         "glass-panel rounded-2xl",
         glow && "glass-glow",
-        hover && "cursor-pointer",
         className
       )}
     >
       {children}
-    </motion.div>
+    </m.div>
   );
 }

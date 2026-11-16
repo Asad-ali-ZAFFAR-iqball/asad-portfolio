@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import {
   GraduationCap,
   Award,
@@ -17,16 +17,15 @@ function EducationCard({ edu }: { edu: (typeof education)[number] }) {
   return (
     <GlassCard className="p-6 hover:border-brand-500/30 transition-colors duration-300">
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-brand-600 text-on-brand shadow-[0_6px_16px_-6px_rgb(41_82_85/0.45)] dark:shadow-none dark:bg-brand-500/10 dark:text-brand-400 flex-shrink-0">
+        <div className="p-3 rounded-xl icon-tile flex-shrink-0">
           <GraduationCap size={22} />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-1">
             {edu.startYear} – {edu.endYear}
           </p>
-          <h3 className="font-bold text-gray-900 dark:text-white">
-            {edu.degree} in {edu.field}
-          </h3>
+          <h4 className="font-bold text-gray-900 dark:text-white">{edu.degree}</h4>
+          <p className="text-sm text-gray-600 dark:text-gray-300 mt-0.5">{edu.field}</p>
           <p className="text-sm text-brand-500 dark:text-brand-400 font-medium mt-0.5">
             {edu.institution}
           </p>
@@ -54,7 +53,7 @@ function CertificationCard({
   index: number;
 }) {
   return (
-    <motion.div
+    <m.div
       initial={{ opacity: 0, y: 16 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -62,7 +61,7 @@ function CertificationCard({
     >
       <GlassCard hover glow className="p-5 h-full">
         <div className="flex items-start justify-between gap-3 mb-3">
-          <div className="p-2 rounded-lg bg-brand-600 text-on-brand shadow-[0_6px_16px_-6px_rgb(41_82_85/0.45)] dark:shadow-none dark:bg-brand-500/10 dark:text-brand-400 flex-shrink-0">
+          <div className="p-2 rounded-lg icon-tile flex-shrink-0">
             <Award size={18} />
           </div>
           {cert.credentialUrl && (
@@ -78,9 +77,9 @@ function CertificationCard({
           )}
         </div>
 
-        <h3 className="font-bold text-sm text-gray-900 dark:text-white leading-snug mb-1">
+        <h4 className="font-bold text-sm text-gray-900 dark:text-white leading-snug mb-1">
           {cert.name}
-        </h3>
+        </h4>
         <p className="text-xs font-semibold text-brand-500 dark:text-brand-400 mb-2">
           {cert.issuer}
         </p>
@@ -111,7 +110,7 @@ function CertificationCard({
           ))}
         </div>
       </GlassCard>
-    </motion.div>
+    </m.div>
   );
 }
 
@@ -122,10 +121,6 @@ export function EducationSection() {
       className="relative py-24 sm:py-32"
       aria-label="Education and certifications section"
     >
-      {/* Background */}
-      <div className="absolute inset-0 -z-10">
-      </div>
-
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="Education & Certifications"
@@ -141,7 +136,7 @@ export function EducationSection() {
           </h3>
           <div className="space-y-4">
             {education.map((edu) => (
-              <motion.div
+              <m.div
                 key={edu.id}
                 initial={{ opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -149,7 +144,7 @@ export function EducationSection() {
                 transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
               >
                 <EducationCard edu={edu} />
-              </motion.div>
+              </m.div>
             ))}
           </div>
         </div>

@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
-import { motion, useReducedMotion } from "framer-motion";
+import { m, useReducedMotion } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import { useTheme } from "next-themes";
-import { ArrowRight, Github, Linkedin, Mail, MapPin, CheckCircle2, Sparkles } from "lucide-react";
+import { ArrowRight, Github, Linkedin, Mail, MapPin, CheckCircle2, Sparkles, Pause, Play } from "lucide-react";
 import { personalInfo, stats } from "@/data";
 import { useTypingEffect } from "@/hooks/useTypingEffect";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
@@ -35,10 +35,10 @@ const containerVariants = {
   },
 };
 
+// Slide only, never fade: the hero text must be visible in the server HTML (it is the LCP element).
 const itemVariants = {
-  hidden: { opacity: 0, y: 24 },
+  hidden: { y: 24 },
   visible: {
-    opacity: 1,
     y: 0,
     transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] },
   },
@@ -62,8 +62,38 @@ const SOCIAL_LINKS = [
   },
 ];
 
+/** Typing line in its own component so its 75 ms ticks re-render only this, not the whole hero. */
+function TypedText({ inView, reduceMotion }: { inView: boolean; reduceMotion: boolean }) {
+  const [paused, setPaused] = useState(false);
+  const { text } = useTypingEffect({ words: TYPING_WORDS, typingSpeed: 75, enabled: inView && !paused && !reduceMotion });
+
+  return (
+    <div className="mb-6 h-10 flex items-center gap-2">
+      <p className="text-lg sm:text-xl text-gray-500 dark:text-gray-400">
+        Specializing in{" "}
+        {/* Screen readers get the full list once instead of half-typed words */}
+        <span className="sr-only">{TYPING_WORDS.join(", ")}</span>
+        <span aria-hidden className="font-mono font-semibold text-brand-500 dark:text-brand-400">
+          {reduceMotion ? TYPING_WORDS[0] : text}
+          {!reduceMotion && <span className="inline-block w-0.5 h-5 ml-0.5 bg-brand-500 animate-pulse align-middle" />}
+        </span>
+      </p>
+      {!reduceMotion && (
+        <button
+          type="button"
+          onClick={() => setPaused((p) => !p)}
+          aria-label={paused ? "Play typing animation" : "Pause typing animation"}
+          aria-pressed={paused}
+          className="p-1.5 rounded-full text-gray-500 hover:text-brand-500 dark:text-gray-400 dark:hover:text-brand-400 hover:bg-gray-100 dark:hover:bg-white/5 transition-colors"
+        >
+          {paused ? <Play size={14} /> : <Pause size={14} />}
+        </button>
+      )}
+    </div>
+  );
+}
+
 export function Hero() {
-  const { text: typedText } = useTypingEffect({ words: TYPING_WORDS, typingSpeed: 75 });
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const reduceMotion = useReducedMotion();
@@ -88,20 +118,22 @@ export function Hero() {
           </div>
         )}
         {/* Orbs */}
-        <motion.div
-          animate={{ scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
+        <m.div
+          animate={reduceMotion ? undefined : { scale: [1, 1.15, 1], opacity: [0.3, 0.5, 0.3] }}
           transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
           className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-brand-500/10 blur-3xl"
         />
-        <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
+        <m.div
+          animate={reduceMotion ? undefined : { scale: [1, 1.2, 1], opacity: [0.2, 0.4, 0.2] }}
           transition={{ duration: 10, repeat: Infinity, ease: "easeInOut", delay: 2 }}
           className="absolute -bottom-24 -left-24 w-80 h-80 rounded-full bg-violet-500/10 blur-3xl"
         />
-        <motion.div
-          animate={{ scale: [1, 1.1, 1], opacity: [0.15, 0.3, 0.15] }}
+        <m.div
+          animate={reduceMotion ? undefined : { scale: [1, 1.1, 1], opacity: [0.15, 0.3, 0.15] }}
           transition={{ duration: 7, repeat: Infinity, ease: "easeInOut", delay: 4 }}
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-cyan-500/5 blur-3xl"
+          // Centre via motion x/y: an animated scale overwrites Tailwind's translate classes and the orb jumps (CLS)
+          style={{ x: "-50%", y: "-50%" }}
+          className="absolute top-1/2 left-1/2 w-[600px] h-[600px] rounded-full bg-cyan-500/5 blur-3xl"
         />
         {/* Grid */}
         <div className="absolute inset-0 bg-[linear-gradient(rgb(var(--brand-500)/0.03)_1px,transparent_1px),linear-gradient(to_right,rgb(var(--brand-500)/0.03)_1px,transparent_1px)] bg-[size:72px_72px]" />
@@ -109,78 +141,66 @@ export function Hero() {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
-        <motion.div
+        <m.div
           variants={containerVariants}
-          initial="hidden"
-          animate={mounted ? "visible" : "hidden"}
+          initial={reduceMotion ? false : "hidden"}
+          animate="visible"
           className="glass-panel mx-auto max-w-5xl rounded-[2rem] px-5 py-12 sm:px-12 sm:py-16 flex flex-col items-center text-center"
         >
           {/* Status badge */}
-          <motion.div variants={itemVariants} className="mb-6">
+          <m.div variants={itemVariants} className="mb-6">
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium border border-emerald-500/30 bg-emerald-500/5 text-emerald-600 dark:text-emerald-400">
               <CheckCircle2 size={14} className="text-emerald-500" />
               Open to New Opportunities
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse-slow" />
             </span>
-          </motion.div>
+          </m.div>
 
           {/* Name */}
-          <motion.h1
+          {/* xl:min-h-[2em]: at xl the name always wraps in Inter but fits one line in the fallback font,
+              so reserve both lines up front or the font swap shifts the whole hero down (CLS) */}
+          <m.h1
             variants={itemVariants}
-            className="text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-gray-900 dark:text-white leading-none mb-4"
+            className="xl:min-h-[2em] text-5xl sm:text-6xl lg:text-7xl xl:text-8xl font-bold tracking-tight text-gray-900 dark:text-white leading-none mb-4"
           >
             Hi, I&apos;m{" "}
-            <span className="relative">
-              <span className="bg-gradient-to-r from-brand-500 via-cyan-500 to-violet-500 bg-clip-text text-transparent">
-                {personalInfo.name}
-              </span>
-              {/* Underline accent */}
-              <motion.span
-                initial={{ scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{ duration: 0.9, delay: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                className="absolute -bottom-2 left-0 right-0 h-1 rounded-full bg-gradient-to-r from-brand-500 via-cyan-500 to-violet-500 origin-left"
-              />
+            {/* text-decoration follows the name onto a second line; an absolute bar did not */}
+            <span className="text-brand-500 underline decoration-brand-500 decoration-[0.06em] underline-offset-[0.14em] [text-decoration-skip-ink:none]">
+              {personalInfo.name}
             </span>
-          </motion.h1>
+          </m.h1>
 
           {/* Title */}
-          <motion.div variants={itemVariants} className="mb-4">
+          <m.div variants={itemVariants} className="mb-4">
             <p className="text-xl sm:text-2xl lg:text-3xl font-semibold text-gray-700 dark:text-gray-300">
               {personalInfo.title}
             </p>
-          </motion.div>
+          </m.div>
 
           {/* Typing effect */}
-          <motion.div variants={itemVariants} className="mb-6 h-10 flex items-center">
-            <p className="text-lg sm:text-xl text-gray-500 dark:text-gray-400">
-              Specializing in{" "}
-              <span className="font-mono font-semibold text-brand-500 dark:text-brand-400">
-                {typedText}
-                <span className="inline-block w-0.5 h-5 ml-0.5 bg-brand-500 animate-pulse align-middle" />
-              </span>
-            </p>
-          </motion.div>
+          <m.div variants={itemVariants}>
+            <TypedText inView={inView} reduceMotion={!!reduceMotion} />
+          </m.div>
 
           {/* Tagline */}
-          <motion.p
+          <m.p
             variants={itemVariants}
             className="max-w-2xl text-base sm:text-lg text-gray-600 dark:text-gray-400 leading-relaxed mb-4"
           >
             {personalInfo.tagline}
-          </motion.p>
+          </m.p>
 
           {/* Location */}
-          <motion.div
+          <m.div
             variants={itemVariants}
             className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400 mb-10"
           >
             <MapPin size={14} />
             {personalInfo.location}
-          </motion.div>
+          </m.div>
 
           {/* CTAs */}
-          <motion.div
+          <m.div
             variants={itemVariants}
             className="flex flex-wrap items-center justify-center gap-3 mb-12"
           >
@@ -203,37 +223,37 @@ export function Hero() {
             >
               Let&apos;s Connect
             </Button>
-          </motion.div>
+          </m.div>
 
           {/* Socials */}
-          <motion.div variants={itemVariants} className="flex items-center gap-3 mb-16">
+          <m.div variants={itemVariants} className="flex items-center gap-3 mb-16">
             {SOCIAL_LINKS.map(({ href, icon, label }) => (
-              <motion.a
+              <m.a
                 key={label}
                 href={href}
                 target={href.startsWith("mailto:") ? undefined : "_blank"}
                 rel="noopener noreferrer"
-                aria-label={label}
+                aria-label={href.startsWith("mailto:") ? label : `${label} (opens in new tab)`}
                 whileHover={{ scale: 1.1, y: -2 }}
                 whileTap={{ scale: 0.95 }}
                 className="p-3 rounded-xl border border-gray-200 dark:border-white/10 text-gray-600 dark:text-gray-400 hover:text-brand-500 dark:hover:text-brand-400 hover:border-brand-500/40 dark:hover:border-brand-500/40 bg-white/60 dark:bg-white/5 hover:bg-brand-50 dark:hover:bg-brand-500/5 transition-colors backdrop-blur-sm"
               >
                 {icon}
-              </motion.a>
+              </m.a>
             ))}
-          </motion.div>
+          </m.div>
 
           {/* Stats */}
-          <motion.div
+          <m.div
             variants={itemVariants}
             className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full max-w-3xl"
           >
             {stats.map((stat, i) => (
-              <motion.div
+              <m.div
                 key={stat.label}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 1.1 + i * 0.1, duration: 0.5 }}
+                initial={reduceMotion ? false : { y: 20 }}
+                animate={{ y: 0 }}
+                transition={{ delay: 0.6 + i * 0.1, duration: 0.5 }}
                 className="glass-panel glass-glow flex flex-col items-center p-5 rounded-2xl"
               >
                 <span className="text-3xl font-bold text-gray-900 dark:text-white tabular-nums">
@@ -243,14 +263,15 @@ export function Hero() {
                 <span className="text-xs text-gray-500 dark:text-gray-400 text-center mt-1 leading-tight">
                   {stat.label}
                 </span>
-              </motion.div>
+              </m.div>
             ))}
-          </motion.div>
-        </motion.div>
+          </m.div>
+        </m.div>
       </div>
 
       {/* Scroll indicator */}
-      <motion.div
+      <m.div
+        aria-hidden
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2.5 }}
@@ -259,14 +280,14 @@ export function Hero() {
         <span className="text-xs text-gray-400 dark:text-gray-500 tracking-widest uppercase">
           Scroll
         </span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
+        <m.div
+          animate={reduceMotion ? undefined : { y: [0, 8, 0] }}
           transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
           className="w-5 h-8 rounded-full border-2 border-gray-300 dark:border-gray-600 flex justify-center pt-1.5"
         >
           <div className="w-1 h-2 bg-gray-400 dark:bg-gray-500 rounded-full" />
-        </motion.div>
-      </motion.div>
+        </m.div>
+      </m.div>
     </section>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { m } from "framer-motion";
 import {
   Layers,
   Users,
@@ -63,7 +63,7 @@ export function About() {
     >
       {/* Background */}
       <div className="absolute inset-0 -z-10">
-        <motion.div
+        <m.div
           animate={{ x: [0, 30, 0], y: [0, -20, 0] }}
           transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
           className="absolute right-0 top-1/4 w-[500px] h-[500px] rounded-full bg-violet-500/5 blur-3xl"
@@ -79,8 +79,8 @@ export function About() {
 
         <div className="grid lg:grid-cols-2 gap-16 items-start">
           {/* Bio text column */}
-          <AnimatedSection direction="right" className="glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
-            <div className="prose prose-gray dark:prose-invert max-w-none">
+          <AnimatedSection as="div" direction="right" className="glass-panel rounded-3xl p-6 sm:p-8 space-y-6">
+            <div className="max-w-none">
               <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-base">
                 I&apos;m{" "}
                 <span className="font-semibold text-gray-900 dark:text-white">
@@ -150,9 +150,9 @@ export function About() {
           </AnimatedSection>
 
           {/* Qualities grid */}
-          <AnimatedSection direction="left" className="grid sm:grid-cols-2 gap-4">
+          <AnimatedSection as="div" direction="left" className="grid sm:grid-cols-2 gap-4">
             {QUALITIES.map((quality, i) => (
-              <motion.div
+              <m.div
                 key={quality.title}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -177,7 +177,7 @@ export function About() {
                     </div>
                   </div>
                 </GlassCard>
-              </motion.div>
+              </m.div>
             ))}
           </AnimatedSection>
         </div>

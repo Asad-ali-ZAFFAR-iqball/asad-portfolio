@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { m, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   Monitor,
   Server,
@@ -48,7 +48,7 @@ function SkillBar({
         </span>
       </div>
       <div className="h-1.5 w-full rounded-full bg-gray-200 dark:bg-white/10 overflow-hidden">
-        <motion.div
+        <m.div
           initial={{ width: 0 }}
           whileInView={{ width: `${proficiency}%` }}
           viewport={{ once: true }}
@@ -70,10 +70,12 @@ function CategoryCard({
   onClick: () => void;
 }) {
   return (
-    <motion.button
+    <m.button
+      type="button"
       whileHover={{ y: -2 }}
       whileTap={{ scale: 0.97 }}
       onClick={onClick}
+      aria-pressed={isActive}
       className={cn(
         "glass-panel glass-glow w-full text-left p-4 rounded-2xl transition-all duration-200",
         isActive && "!border-brand-400/60 bg-brand-500/10 dark:bg-brand-500/[0.12] shadow-[0_0_30px_-6px_rgb(var(--brand-500)/0.55)]"
@@ -97,13 +99,13 @@ function CategoryCard({
           </p>
         </div>
         {isActive && (
-          <motion.div
+          <m.div
             layoutId="active-dot"
             className="w-2 h-2 rounded-full bg-brand-500"
           />
         )}
       </div>
-    </motion.button>
+    </m.button>
   );
 }
 
@@ -111,6 +113,7 @@ export function Skills() {
   const [activeCategory, setActiveCategory] = useState<string>(
     skillCategories[0].id
   );
+  const reduceMotion = useReducedMotion();
 
   const currentCategory = skillCategories.find((c) => c.id === activeCategory)!;
 
@@ -122,8 +125,8 @@ export function Skills() {
     >
       {/* Background */}
       <div className="absolute inset-0 -z-10">
-        <motion.div
-          animate={{ scale: [1, 1.2, 1], opacity: [0.05, 0.12, 0.05] }}
+        <m.div
+          animate={reduceMotion ? undefined : { scale: [1, 1.2, 1], opacity: [0.05, 0.12, 0.05] }}
           transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
           className="absolute left-1/4 bottom-0 w-[600px] h-[400px] rounded-full bg-brand-500/10 blur-3xl"
         />
@@ -151,7 +154,7 @@ export function Skills() {
 
           {/* Skills panel */}
           <AnimatePresence mode="wait">
-            <motion.div
+            <m.div
               key={activeCategory}
               initial={{ opacity: 0, x: 20 }}
               animate={{ opacity: 1, x: 0 }}
@@ -199,6 +202,7 @@ export function Skills() {
                     (level) => (
                       <div key={level} className="flex items-center gap-1.5">
                         <span
+                          aria-hidden
                           className={cn(
                             "text-xs font-semibold",
                             getSkillLevelColor(level)
@@ -215,12 +219,12 @@ export function Skills() {
                 </div>
               </GlassCard>
               </TiltCard>
-            </motion.div>
+            </m.div>
           </AnimatePresence>
         </div>
 
-        {/* Floating tech badges — decorative */}
-        <motion.div
+        {/* Tech badges: only technologies named in the CV (public/asad-ali-zaffar.pdf) */}
+        <m.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
@@ -228,11 +232,11 @@ export function Skills() {
           className="mt-16 flex flex-wrap gap-2.5 justify-center"
         >
           {[
-            "Node.js", "React", "TypeScript", "Python", "PostgreSQL", "Redis",
-            "Kafka", "Docker", "Kubernetes", "AWS", "GraphQL", "Next.js",
-            "Django", "Terraform", "Go", "Elasticsearch",
+            "Laravel", "PHP", "Vue.js", "React.js", "TypeScript", "Inertia.js",
+            "Next.js", "MySQL", "Redis", "Laravel Horizon", "Docker", "GitHub Actions",
+            "AWS", "Sentry", "Twilio", "Google Maps API",
           ].map((tech, i) => (
-            <motion.span
+            <m.span
               key={tech}
               initial={{ opacity: 0, scale: 0.8 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -242,9 +246,9 @@ export function Skills() {
               className="px-3 py-1.5 text-xs font-mono font-medium rounded-full border border-gray-200/80 dark:border-white/[0.08] bg-white/60 dark:bg-white/[0.03] text-gray-600 dark:text-gray-400 cursor-default"
             >
               {tech}
-            </motion.span>
+            </m.span>
           ))}
-        </motion.div>
+        </m.div>
       </div>
     </section>
   );

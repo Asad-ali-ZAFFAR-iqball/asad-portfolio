@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef } from "react";
-import { motion, useInView, type Variants } from "framer-motion";
+import { m, useInView, type Variants } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 interface AnimatedSectionProps {
@@ -51,7 +51,7 @@ export function AnimatedSection({
   const ref = useRef<any>(null);
   const inView = useInView(ref, { once, margin: "-80px" });
 
-  const MotionTag = motion[Tag];
+  const MotionTag = m[Tag];
 
   return (
     <MotionTag

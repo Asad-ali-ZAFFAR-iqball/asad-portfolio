@@ -18,13 +18,19 @@ export function formatDateRange(start: string, end: string | "Present"): string 
 /**
  * Calculates duration in years/months between two date strings.
  */
-export function calculateDuration(start: string, end: string | "Present"): string {
-  const startDate = new Date(start);
-  const endDate = end === "Present" ? new Date() : new Date(end);
+const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
-  const months =
-    (endDate.getFullYear() - startDate.getFullYear()) * 12 +
-    (endDate.getMonth() - startDate.getMonth());
+/** "Dec 2023" → months since year 0. Parsed by hand: new Date("Dec 2023") is engine-dependent. */
+function monthIndex(value: string): number {
+  const [mon, year] = value.trim().split(/\s+/);
+  const m = MONTHS.indexOf(mon.slice(0, 3));
+  if (m < 0 || !Number.isFinite(Number(year))) throw new Error(`Bad date "${value}", expected "Mon YYYY"`);
+  return Number(year) * 12 + m;
+}
+
+export function calculateDuration(start: string, end: string | "Present", now: Date = new Date()): string {
+  const endMonths = end === "Present" ? now.getFullYear() * 12 + now.getMonth() : monthIndex(end);
+  const months = endMonths - monthIndex(start);
 
   const years = Math.floor(months / 12);
   const remainingMonths = months % 12;
@@ -32,26 +38,6 @@ export function calculateDuration(start: string, end: string | "Present"): strin
   if (years === 0) return `${remainingMonths} mo`;
   if (remainingMonths === 0) return `${years} yr${years > 1 ? "s" : ""}`;
   return `${years} yr${years > 1 ? "s" : ""} ${remainingMonths} mo`;
-}
-
-/**
- * Truncates text to a maximum length with ellipsis.
- */
-export function truncate(text: string, maxLength: number): string {
-  if (text.length <= maxLength) return text;
-  return text.slice(0, maxLength).trimEnd() + "…";
-}
-
-/**
- * Generates a slug from a string.
- */
-export function slugify(str: string): string {
-  return str
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^\w-]+/g, "")
-    .replace(/--+/g, "-")
-    .trim();
 }
 
 /**
@@ -79,12 +65,6 @@ export function getStatusColor(status: string): string {
   };
   return map[status] ?? "bg-gray-500/10 text-gray-400 border-gray-500/20";
 }
-
-/**
- * Delays execution for a specified duration.
- */
-export const sleep = (ms: number): Promise<void> =>
-  new Promise((resolve) => setTimeout(resolve, ms));
 
 /** Canonical public URL (no trailing slash). Netlify is primary; the GitHub Pages copy points its canonical here too. */
 export const SITE_URL = "https://asad-ali-zaffar-portfolio.netlify.app";
