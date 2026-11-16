@@ -23,7 +23,7 @@ export default function NotFound() {
             <div className="w-24 h-24 rounded-3xl bg-brand-500/10 flex items-center justify-center">
               <Code2 size={40} className="text-brand-500" />
             </div>
-            <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-red-500 flex items-center justify-center text-white text-xs font-bold">
+            <div className="absolute -top-2 -right-2 w-8 h-8 rounded-full bg-brand-600 flex items-center justify-center text-on-brand text-xs font-bold">
               404
             </div>
           </div>

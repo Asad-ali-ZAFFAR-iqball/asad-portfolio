@@ -32,7 +32,7 @@ export function Testimonials() {
             >
               <GlassCard className="p-6">
                 <div className="flex items-start gap-4">
-                  <div className="p-3 rounded-xl bg-brand-500/10 text-brand-500 flex-shrink-0">
+                  <div className="p-3 rounded-xl bg-brand-600 text-on-brand shadow-[0_6px_16px_-6px_rgb(41_82_85/0.45)] dark:shadow-none dark:bg-brand-500/10 dark:text-brand-400 flex-shrink-0">
                     <UserCheck size={22} />
                   </div>
                   <div className="min-w-0">

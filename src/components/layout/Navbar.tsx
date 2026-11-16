@@ -14,6 +14,7 @@ const NAV_LINKS = [
   { label: "Experience", href: "#experience" },
   { label: "Skills", href: "#skills" },
   { label: "Projects", href: "#projects" },
+  { label: "Services", href: "#services" },
   { label: "Education", href: "#education" },
   { label: "Contact", href: "#contact" },
 ];
@@ -43,14 +44,22 @@ export function Navbar() {
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  const toggleTheme = () =>
-    setTheme(resolvedTheme === "dark" ? "light" : "dark");
+  const toggleTheme = () => {
+    const next = resolvedTheme === "dark" ? "light" : "dark";
+    const apply = () => {
+      // next-themes sets the class in an effect; set it now so the view transition snapshots the new theme
+      document.documentElement.classList.toggle("dark", next === "dark");
+      setTheme(next);
+    };
+    if (!document.startViewTransition || window.matchMedia("(prefers-reduced-motion: reduce)").matches) apply();
+    else document.startViewTransition(apply);
+  };
 
   return (
     <>
       {/* Scroll progress bar */}
       <motion.div
-        className="fixed top-0 left-0 right-0 z-[100] h-[2px] origin-left bg-gradient-to-r from-brand-500 via-cyan-400 to-violet-500"
+        className="fixed top-0 left-0 right-0 z-[100] h-[2px] origin-left bg-gradient-to-r from-brand-600 via-gray-500 to-brand-600 dark:via-brand-200"
         style={{ scaleX: scrollProgress / 100 }}
       />
 
@@ -58,7 +67,7 @@ export function Navbar() {
         <nav
           className={cn(
             "glass-panel max-w-6xl mx-auto h-14 sm:h-16 pl-3 pr-2 sm:pl-5 sm:pr-3 flex items-center justify-between rounded-full transition-colors duration-300",
-            isScrolled && "bg-white/75 dark:bg-[#14110e]/70"
+            isScrolled && "bg-white/75 dark:bg-[#101422]/70"
           )}
         >
           {/* Logo */}
@@ -69,7 +78,7 @@ export function Navbar() {
             className="flex items-center gap-2 font-bold text-lg text-gray-900 dark:text-white"
             aria-label="Home"
           >
-            <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-brand-600 text-white">
+            <span className="flex items-center justify-center w-8 h-8 rounded-lg bg-brand-600 text-on-brand">
               <Code2 size={16} strokeWidth={2.5} />
             </span>
             <span className="hidden sm:inline">
@@ -129,7 +138,7 @@ export function Navbar() {
               rel="noopener noreferrer"
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
-              className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold rounded-full bg-gradient-to-r from-brand-600 to-violet-600 bg-brand-600 hover:bg-brand-500 text-white transition-colors shadow-sm hover:shadow-glow"
+              className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 text-sm font-semibold rounded-full bg-brand-600 hover:bg-brand-500 text-on-brand transition-colors shadow-sm hover:shadow-glow"
             >
               Resume
             </motion.a>
@@ -155,7 +164,7 @@ export function Navbar() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.25, ease: "easeInOut" }}
-              className="glass-panel md:hidden overflow-hidden mt-2 max-w-6xl mx-auto rounded-3xl bg-white/90 dark:bg-[#14110e]/90"
+              className="glass-panel md:hidden overflow-hidden mt-2 max-w-6xl mx-auto rounded-3xl bg-white/90 dark:bg-[#101422]/90"
             >
               <ul className="flex flex-col px-4 py-4 gap-1">
                 {NAV_LINKS.map(({ label, href }) => (
@@ -174,7 +183,7 @@ export function Navbar() {
                     href={personalInfo.resumeUrl}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex items-center justify-center px-4 py-3 rounded-xl text-sm font-semibold bg-brand-600 text-white hover:bg-brand-500 transition-colors"
+                    className="flex items-center justify-center px-4 py-3 rounded-xl text-sm font-semibold bg-brand-600 text-on-brand hover:bg-brand-500 transition-colors"
                   >
                     Download Resume
                   </a>

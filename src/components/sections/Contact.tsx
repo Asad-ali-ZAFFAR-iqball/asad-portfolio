@@ -66,7 +66,7 @@ function Field({
 const inputClasses = cn(
   "w-full px-4 py-3 rounded-xl text-sm transition-all duration-200",
   "bg-white/60 dark:bg-white/[0.04] backdrop-blur-md",
-  "border border-white/80 dark:border-white/[0.1] shadow-[inset_0_1px_2px_rgba(0,0,0,0.04)]",
+  "border border-white/80 dark:border-white/[0.1] shadow-[inset_0_1px_2px_rgba(22,38,35,0.04)]",
   "text-gray-900 dark:text-white",
   "placeholder:text-gray-400 dark:placeholder:text-gray-500",
   "focus:outline-none focus:ring-2 focus:ring-brand-500/50 focus:border-brand-500 focus:shadow-[0_0_24px_-4px_rgb(var(--brand-500)/0.5)]",

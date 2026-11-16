@@ -5,7 +5,7 @@ export const skillCategories: SkillCategory[] = [
     id: "backend",
     category: "Backend Development",
     icon: "server",
-    color: "from-violet-500 to-purple-500",
+    color: "from-brand-500 to-brand-700",
     skills: [
       { name: "PHP", level: "Expert", proficiency: 92 },
       { name: "Laravel (MVC, Routing, Middleware)", level: "Expert", proficiency: 93 },
@@ -18,6 +18,7 @@ export const skillCategories: SkillCategory[] = [
       { name: "Facebook / Instagram", level: "Advanced", proficiency: 82 },
       { name: "LinkedIn", level: "Proficient", proficiency: 78 },
       { name: "Twilio", level: "Advanced", proficiency: 82 },
+      { name: "Payment Gateway Integration (Stripe)", level: "Advanced", proficiency: 82 },
       { name: "VONQ", level: "Proficient", proficiency: 75 },
     ],
   },
@@ -25,7 +26,7 @@ export const skillCategories: SkillCategory[] = [
     id: "frontend",
     category: "Frontend Development",
     icon: "monitor",
-    color: "from-blue-500 to-cyan-500",
+    color: "from-brand-500 to-brand-700",
     skills: [
       { name: "JavaScript", level: "Advanced", proficiency: 87 },
       { name: "TypeScript", level: "Advanced", proficiency: 82 },
@@ -41,7 +42,7 @@ export const skillCategories: SkillCategory[] = [
     id: "database",
     category: "Database",
     icon: "database",
-    color: "from-pink-500 to-rose-500",
+    color: "from-brand-500 to-brand-700",
     skills: [
       { name: "MySQL (design & optimization)", level: "Advanced", proficiency: 88 },
       { name: "SQL", level: "Advanced", proficiency: 86 },
@@ -53,7 +54,7 @@ export const skillCategories: SkillCategory[] = [
     id: "devops",
     category: "DevOps & Tools",
     icon: "cloud",
-    color: "from-emerald-500 to-teal-500",
+    color: "from-brand-500 to-brand-700",
     skills: [
       { name: "Docker", level: "Proficient", proficiency: 78 },
       { name: "CI/CD (GitHub Actions)", level: "Proficient", proficiency: 78 },

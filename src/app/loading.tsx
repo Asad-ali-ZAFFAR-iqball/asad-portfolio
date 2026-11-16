@@ -21,7 +21,7 @@ export default function Loading() {
             className="absolute inset-0 rounded-full border-2 border-brand-500/20 border-t-brand-500"
           />
           <div className="absolute inset-2 rounded-full bg-brand-600 flex items-center justify-center">
-            <span className="text-white font-bold text-lg">A</span>
+            <span className="text-on-brand font-bold text-lg">A</span>
           </div>
         </div>
 

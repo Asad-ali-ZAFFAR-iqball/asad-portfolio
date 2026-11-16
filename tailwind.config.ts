@@ -1,5 +1,14 @@
-import colors from "tailwindcss/colors";
 import type { Config } from "tailwindcss";
+
+// Colours are RGB triplets set per theme in globals.css; they are the only colours the site can use.
+const v = (name: string) => `rgb(var(--${name}) / <alpha-value>)`;
+const ramp = (name: string) =>
+  Object.fromEntries([50, 100, 200, 300, 400, 500, 600, 700, 800, 900, 950].map((s) => [s, v(`${name}-${s}`)]));
+const brand = ramp("brand");
+const gray = ramp("gray");
+// Fold every default Tailwind hue into the palette so no off-palette class (data gradients, status dots) can leak in.
+const HUES = ["red", "orange", "amber", "yellow", "lime", "green", "emerald", "teal", "cyan", "sky", "blue", "indigo", "violet", "purple", "fuchsia", "pink", "rose"];
+const NEUTRALS = ["slate", "zinc", "neutral", "stone"];
 
 const config: Config = {
   darkMode: "class",
@@ -10,44 +19,29 @@ const config: Config = {
     "./src/data/**/*.{js,ts}", // data files carry class names (e.g. skill category gradients)
   ],
   theme: {
+    colors: {
+      transparent: "transparent",
+      current: "currentColor",
+      inherit: "inherit",
+      white: v("white"),
+      black: v("black"),
+      "on-brand": v("on-brand"), // text on brand-filled surfaces
+      brand,
+      gray,
+      ...Object.fromEntries(NEUTRALS.map((k) => [k, gray])),
+      ...Object.fromEntries(HUES.map((k) => [k, brand])),
+      accent: { cyan: brand[500], violet: brand[500], emerald: brand[500], amber: brand[500] },
+    },
     extend: {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
         mono: ["JetBrains Mono", "Fira Code", "monospace"],
         display: ["Cal Sans", "Inter", "system-ui", "sans-serif"],
       },
-      colors: {
-        brand: {
-          50: "rgb(var(--brand-50) / <alpha-value>)",
-          100: "rgb(var(--brand-100) / <alpha-value>)",
-          200: "rgb(var(--brand-200) / <alpha-value>)",
-          300: "rgb(var(--brand-300) / <alpha-value>)",
-          400: "rgb(var(--brand-400) / <alpha-value>)",
-          500: "rgb(var(--brand-500) / <alpha-value>)",
-          600: "rgb(var(--brand-600) / <alpha-value>)",
-          700: "rgb(var(--brand-700) / <alpha-value>)",
-          800: "rgb(var(--brand-800) / <alpha-value>)",
-          900: "rgb(var(--brand-900) / <alpha-value>)",
-          950: "rgb(var(--brand-950) / <alpha-value>)",
-        },
-        // Theme-aware accents (dark: amber / fuchsia); other shades stay Tailwind defaults.
-        cyan: { ...colors.cyan, 400: "rgb(var(--cyan-400) / <alpha-value>)", 500: "rgb(var(--cyan-500) / <alpha-value>)" },
-        violet: { ...colors.violet, 500: "rgb(var(--violet-500) / <alpha-value>)", 600: "rgb(var(--violet-600) / <alpha-value>)" },
-        accent: {
-          cyan: "#06b6d4",
-          violet: "#7c3aed",
-          emerald: "#10b981",
-          amber: "#f59e0b",
-        },
-      },
       backgroundImage: {
         "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
         "gradient-conic":
           "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
-        "mesh-dark":
-          "radial-gradient(at 40% 20%, hsla(228,100%,74%,0.05) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(189,100%,56%,0.05) 0px, transparent 50%), radial-gradient(at 0% 50%, hsla(355,100%,93%,0.03) 0px, transparent 50%)",
-        "mesh-light":
-          "radial-gradient(at 40% 20%, hsla(228,100%,74%,0.08) 0px, transparent 50%), radial-gradient(at 80% 0%, hsla(189,100%,56%,0.08) 0px, transparent 50%)",
       },
       animation: {
         "fade-in": "fadeIn 0.6s ease-out forwards",
@@ -89,8 +83,8 @@ const config: Config = {
         glow: "0 0 20px rgb(var(--brand-500) / 0.3)",
         "glow-lg": "0 0 40px rgb(var(--brand-500) / 0.2)",
         "glow-cyan": "0 0 20px rgb(var(--cyan-500) / 0.3)",
-        glass: "0 8px 32px rgba(0, 0, 0, 0.12)",
-        "glass-dark": "0 8px 32px rgba(0, 0, 0, 0.4)",
+        glass: "0 8px 32px rgb(var(--black) / 0.12)",
+        "glass-dark": "0 8px 32px rgb(var(--black) / 0.4)",
       },
       backdropBlur: {
         xs: "2px",

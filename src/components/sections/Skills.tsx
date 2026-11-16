@@ -82,7 +82,7 @@ function CategoryCard({
       <div className="flex items-center gap-3">
         <div
           className={cn(
-            "p-2 rounded-xl text-white bg-gradient-to-br shadow-[0_0_18px_-2px_rgb(var(--brand-500)/0.6)]",
+            "p-2 rounded-xl text-on-brand bg-gradient-to-br shadow-[0_0_18px_-2px_rgb(var(--brand-500)/0.6)]",
             category.color
           )}
         >
@@ -164,7 +164,7 @@ export function Skills() {
                 <div className="flex items-center gap-3 mb-8">
                   <div
                     className={cn(
-                      "p-2.5 rounded-xl text-white bg-gradient-to-br shadow-[0_0_22px_-2px_rgb(var(--brand-500)/0.65)]",
+                      "p-2.5 rounded-xl text-on-brand bg-gradient-to-br shadow-[0_0_22px_-2px_rgb(var(--brand-500)/0.65)]",
                       currentCategory.color
                     )}
                   >

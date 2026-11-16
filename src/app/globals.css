@@ -6,31 +6,31 @@
 
 /* ─── Base resets & custom properties ─────────────────────────────────────── */
 @layer base {
-  /* Accent palette as RGB triplets; Tailwind's brand / cyan-400,500 / violet-500,600 read these.
-     Light: 60% Almond Milk (background) · 30% Dusty Teal (glass, secondary) · 10% Cherry Soda (accents) */
+  /* Every Tailwind colour reads these RGB triplets (see tailwind.config.ts), so the whole UI uses only
+     the 8 palette colours plus tints/shades mixed between them.
+     Light: bg #F0F5F7 · primary #295255 · text #162623 · secondary #577877, with #FFFFFF surfaces */
   :root {
-    --background: 37 42% 89%;
-    --foreground: 222 47% 11%;
     color-scheme: light;
-    /* brand = Cherry Soda; 500 is a touch deeper than the #d1294b swatch (400) so text passes 4.5:1 on Almond Milk */
-    --brand-50: 253 242 244; --brand-100: 252 228 233; --brand-200: 249 200 210; --brand-300: 243 157 176;
-    --brand-400: 209 41 75; --brand-500: 184 30 62; --brand-600: 160 25 54; --brand-700: 135 21 46;
-    --brand-800: 112 18 40; --brand-900: 90 15 33; --brand-950: 54 8 20;
-    --cyan-400: 91 143 139; --cyan-500: 63 107 104; /* Dusty Teal (#5b8f8b) and a deeper shade for icons/text */
-    --violet-500: 184 30 62; --violet-600: 160 25 54; /* Cherry Soda */
+    --white: 255 255 255; --black: 22 38 35; --on-brand: 240 245 247;
+    --brand-50: 228 235 237; --brand-100: 216 225 228; --brand-200: 190 204 207; --brand-300: 141 164 166;
+    --brand-400: 57 95 97; --brand-500: 41 82 85; --brand-600: 41 82 85; --brand-700: 35 69 70;
+    --brand-800: 31 58 58; --brand-900: 26 47 45; --brand-950: 22 38 35;
+    /* 400/500 are #577877 nudged toward #162623 so small muted text passes 4.5:1 */
+    --gray-50: 231 238 239; --gray-100: 222 230 232; --gray-200: 203 215 216; --gray-300: 176 193 193;
+    --gray-400: 82 113 112; --gray-500: 79 110 109; --gray-600: 68 95 94; --gray-700: 51 75 73;
+    --gray-800: 35 54 52; --gray-900: 22 38 35; --gray-950: 22 38 35;
   }
 
-  /* Dark: 60% Smoked Oak (background) · 30% Fawn Suede (glass, secondary) · 10% Neon Iris (accents) */
+  /* Dark: bg #101422 · surface #272B3B · text #FFFFFF · accent #A8DCE7 */
   .dark {
-    --background: 30 18% 7%;
-    --foreground: 35 40% 96%;
     color-scheme: dark;
-    /* brand = Neon Iris (core #7b2ff7, glow #a78bfa) */
-    --brand-50: 245 240 255; --brand-100: 237 228 255; --brand-200: 221 204 255; --brand-300: 196 170 255;
-    --brand-400: 167 139 250; --brand-500: 123 47 247; --brand-600: 109 31 226; --brand-700: 91 24 189;
-    --brand-800: 74 22 150; --brand-900: 59 20 115; --brand-950: 36 12 72;
-    --cyan-400: 226 205 180; --cyan-500: 196 164 132; /* Fawn Suede */
-    --violet-500: 167 139 250; --violet-600: 139 92 246; /* Neon Iris glow */
+    --white: 255 255 255; --black: 16 20 34; --on-brand: 16 20 34;
+    --brand-50: 242 250 251; --brand-100: 225 243 247; --brand-200: 203 234 241; --brand-300: 181 225 235;
+    --brand-400: 168 220 231; --brand-500: 181 225 235; --brand-600: 168 220 231; --brand-700: 123 158 171;
+    --brand-800: 91 114 128; --brand-900: 65 78 93; --brand-950: 30 34 49;
+    --gray-50: 249 249 249; --gray-100: 240 240 241; --gray-200: 225 225 228; --gray-300: 203 204 208;
+    --gray-400: 177 179 184; --gray-500: 147 149 157; --gray-600: 125 128 137; --gray-700: 65 68 83;
+    --gray-800: 39 43 59; --gray-900: 28 32 47; --gray-950: 16 20 34;
   }
 
   * {
@@ -45,7 +45,8 @@
   }
 
   body {
-    @apply bg-[#efe6d8] text-gray-900 dark:bg-[#14110e] dark:text-[#f6f1ea];
+    @apply bg-[#F0F5F7] text-[#162623] dark:bg-[#101422] dark:text-[#FFFFFF];
+    transition: background-color 0.4s ease, color 0.4s ease;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
     -webkit-font-smoothing: antialiased;
@@ -100,7 +101,7 @@
 /* ─── Utilities ──────────────────────────────────────────────────────────── */
 @layer utilities {
   .text-gradient {
-    @apply bg-gradient-to-r from-brand-500 via-cyan-500 to-violet-500 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-brand-600 via-gray-500 to-brand-600 dark:via-brand-200 bg-clip-text text-transparent;
   }
 
   .section-padding {
@@ -140,8 +141,8 @@
   /* Frosted glass surface: translucent fill, blur, hairline border, top-edge highlight and a soft shine. */
   .glass-panel {
     @apply relative isolate border backdrop-blur-xl backdrop-saturate-150;
-    @apply bg-[rgb(255_251_245/0.55)] border-[rgb(91_143_139/0.28)] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.9),0_10px_40px_-12px_rgba(47,90,87,0.22)];
-    @apply dark:bg-[rgb(196_164_132/0.07)] dark:border-[rgb(196_164_132/0.18)] dark:shadow-[inset_0_1px_0_0_rgba(226,205,180,0.12),0_20px_50px_-20px_rgba(0,0,0,0.85)];
+    @apply bg-[rgb(255_255_255/0.88)] border-[rgb(87_120_119/0.14)] shadow-[0_1px_2px_rgba(41,82,85,0.06),0_12px_32px_-12px_rgba(41,82,85,0.18)];
+    @apply dark:bg-[rgb(39_43_59/0.55)] dark:border-[rgb(168_220_231/0.12)] dark:shadow-[inset_0_1px_0_0_rgba(168,220,231,0.08),0_20px_50px_-20px_rgba(16,20,34,0.9)];
   }
 
   .glass-panel::before {
@@ -151,19 +152,20 @@
     z-index: -1;
     border-radius: inherit;
     pointer-events: none;
-    background: linear-gradient(135deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 38%);
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0) 38%);
     opacity: 0.5;
   }
 
   .dark .glass-panel::before {
-    background: linear-gradient(135deg, rgba(226, 205, 180, 0.10) 0%, rgba(226, 205, 180, 0) 40%);
+    background: linear-gradient(135deg, rgba(168, 220, 231, 0.07) 0%, rgba(168, 220, 231, 0) 40%);
     opacity: 1;
   }
 
   /* Hover glow for interactive glass */
   .glass-glow {
     @apply transition-[border-color,box-shadow] duration-300 hover:border-brand-400/50 dark:hover:border-cyan-400/40;
-    @apply hover:shadow-[inset_0_1px_0_0_rgba(255,255,255,0.12),0_0_0_1px_rgb(var(--brand-400)/0.15),0_20px_60px_-15px_rgb(var(--brand-500)/0.45)];
+    @apply hover:shadow-[0_0_0_1px_rgb(var(--brand-500)/0.12),0_24px_48px_-16px_rgb(var(--brand-500)/0.32)];
+    @apply dark:hover:shadow-[inset_0_1px_0_0_rgba(168,220,231,0.12),0_0_0_1px_rgb(var(--brand-400)/0.15),0_20px_60px_-15px_rgb(var(--brand-500)/0.45)];
   }
 
   /* Prose overrides for dark mode */
@@ -185,16 +187,23 @@
   z-index: -20;
   pointer-events: none;
   background:
-    radial-gradient(45rem 30rem at 85% -10%, rgba(91, 143, 139, 0.22), transparent 60%),
-    radial-gradient(40rem 30rem at -10% 40%, rgba(91, 143, 139, 0.14), transparent 60%),
-    radial-gradient(36rem 26rem at 70% 110%, rgba(209, 41, 75, 0.08), transparent 60%),
-    linear-gradient(180deg, #efe6d8 0%, #f5eee3 50%, #efe6d8 100%);
+    radial-gradient(45rem 30rem at 85% -10%, rgba(41, 82, 85, 0.16), transparent 60%),
+    radial-gradient(40rem 30rem at -10% 40%, rgba(87, 120, 119, 0.14), transparent 60%),
+    radial-gradient(36rem 26rem at 70% 110%, rgba(41, 82, 85, 0.10), transparent 60%),
+    #F0F5F7;
 }
 
 .dark .ambient-light {
   background:
-    radial-gradient(50rem 34rem at 85% -10%, rgba(196, 164, 132, 0.16), transparent 60%),
-    radial-gradient(44rem 32rem at -10% 45%, rgba(123, 47, 247, 0.14), transparent 60%),
-    radial-gradient(44rem 30rem at 70% 110%, rgba(108, 99, 88, 0.30), transparent 60%),
-    linear-gradient(180deg, #14110e 0%, #2a241f 50%, #14110e 100%);
+    radial-gradient(50rem 34rem at 85% -10%, rgba(168, 220, 231, 0.10), transparent 60%),
+    radial-gradient(44rem 32rem at -10% 45%, rgba(39, 43, 59, 0.9), transparent 60%),
+    radial-gradient(44rem 30rem at 70% 110%, rgba(168, 220, 231, 0.06), transparent 60%),
+    #101422;
+}
+
+/* Theme switch: soft cross-fade via the View Transitions API (Navbar toggle) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.45s;
+  animation-timing-function: ease;
 }

@@ -40,11 +40,11 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     ref
   ) => {
     const base =
-      "relative inline-flex items-center justify-center gap-2 font-semibold rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 disabled:opacity-60 disabled:cursor-not-allowed overflow-hidden";
+      "relative inline-flex items-center justify-center gap-2 font-semibold rounded-xl transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-black disabled:opacity-60 disabled:cursor-not-allowed overflow-hidden";
 
     const variants: Record<ButtonVariant, string> = {
       primary:
-        "bg-brand-600 hover:bg-brand-500 text-white shadow-md hover:shadow-glow border border-brand-700 hover:border-brand-500",
+        "bg-brand-600 hover:bg-brand-500 text-on-brand shadow-md hover:shadow-glow border border-brand-700 hover:border-brand-500",
       secondary:
         "bg-white dark:bg-white/10 hover:bg-gray-50 dark:hover:bg-white/15 text-gray-900 dark:text-white border border-gray-200 dark:border-white/10 shadow-sm",
       ghost:
@@ -65,7 +65,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       <>
         {isLoading && (
           <span className="absolute inset-0 flex items-center justify-center bg-inherit rounded-xl">
-            <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+            <span className="w-4 h-4 border-2 border-on-brand/30 border-t-on-brand rounded-full animate-spin" />
           </span>
         )}
         {icon && iconPosition === "left" && !isLoading && (

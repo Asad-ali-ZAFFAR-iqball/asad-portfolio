@@ -11,14 +11,14 @@ export const projects: Project[] = [
     description:
       "A multi-tenant, AI-based HR platform with localization support, featuring AI interview automation — chat and call interviews with scoring of candidate fit for the job.",
     longDescription:
-      "Used Redis and Laravel Horizon for queues and background processing, Sentry for error monitoring, AWS for infrastructure, and GitHub Actions for CI/CD. Integrated third-party platforms including Facebook, Instagram, LinkedIn, Google, Twilio, and VONQ.",
+      "Used Redis and Laravel Horizon for queues and background processing, Sentry for error monitoring, AWS for infrastructure, and GitHub Actions for CI/CD. Integrated third-party platforms including Facebook, Instagram, LinkedIn, Google, Twilio, and VONQ, plus Stripe for payments.",
     image: "/images/projects/keen.webp",
     tags: ["Invictus Hub", "AI", "Multi-tenant"],
-    technologies: ["Laravel", "Vue.js", "Inertia.js", "Redis", "Laravel Horizon", "Sentry", "AWS", "GitHub Actions", "Twilio", "VONQ"],
+    technologies: ["Laravel", "Vue.js", "Inertia.js", "Redis", "Laravel Horizon", "Sentry", "AWS", "GitHub Actions", "Twilio", "VONQ", "Stripe"],
     liveUrl: "https://app.keen.cc",
     featured: true,
     status: "Live",
-    metrics: ["AI chat & call interviews", "Candidate fit scoring", "Multi-tenant + localization", "Social & job-board integrations"],
+    metrics: ["AI chat & call interviews", "Candidate fit scoring", "Multi-tenant + localization", "Social & job-board integrations", "Stripe payment gateway"],
     year: "2023–Present",
   },
   {

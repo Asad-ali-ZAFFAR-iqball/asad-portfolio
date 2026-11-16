@@ -7,10 +7,8 @@ import { AdditiveBlending, BufferAttribute, BufferGeometry, Color } from "three"
 
 // Per-theme colours, matching the CSS accent variables in globals.css.
 const PALETTES = {
-  // Almond Milk / Dusty Teal glass with Cherry Soda light
-  light: { shapes: ["#5b8f8b", "#d1294b", "#7aaaa6", "#ec6885", "#e7dccb", "#5b8f8b"], a: "#d1294b", b: "#5b8f8b", c: "#ec6885" },
-  // Smoked Oak / Fawn Suede glass with Neon Iris light
-  dark: { shapes: ["#c4a484", "#7b2ff7", "#e2cdb4", "#a78bfa", "#6c6358", "#c4a484"], a: "#7b2ff7", b: "#c4a484", c: "#a78bfa" },
+  light: { shapes: ["#295255", "#577877", "#162623", "#577877", "#295255", "#577877"], a: "#295255", b: "#577877", c: "#162623" },
+  dark: { shapes: ["#A8DCE7", "#272B3B", "#FFFFFF", "#A8DCE7", "#272B3B", "#A8DCE7"], a: "#A8DCE7", b: "#272B3B", c: "#FFFFFF" },
 };
 type Palette = (typeof PALETTES)["dark"];
 

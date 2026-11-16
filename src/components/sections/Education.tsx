@@ -17,7 +17,7 @@ function EducationCard({ edu }: { edu: (typeof education)[number] }) {
   return (
     <GlassCard className="p-6 hover:border-brand-500/30 transition-colors duration-300">
       <div className="flex items-start gap-4">
-        <div className="p-3 rounded-xl bg-brand-500/10 text-brand-500 flex-shrink-0">
+        <div className="p-3 rounded-xl bg-brand-600 text-on-brand shadow-[0_6px_16px_-6px_rgb(41_82_85/0.45)] dark:shadow-none dark:bg-brand-500/10 dark:text-brand-400 flex-shrink-0">
           <GraduationCap size={22} />
         </div>
         <div className="flex-1 min-w-0">
@@ -62,7 +62,7 @@ function CertificationCard({
     >
       <GlassCard hover glow className="p-5 h-full">
         <div className="flex items-start justify-between gap-3 mb-3">
-          <div className="p-2 rounded-lg bg-violet-500/10 text-violet-500 flex-shrink-0">
+          <div className="p-2 rounded-lg bg-brand-600 text-on-brand shadow-[0_6px_16px_-6px_rgb(41_82_85/0.45)] dark:shadow-none dark:bg-brand-500/10 dark:text-brand-400 flex-shrink-0">
             <Award size={18} />
           </div>
           {cert.credentialUrl && (

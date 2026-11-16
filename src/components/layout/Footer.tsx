@@ -10,7 +10,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row items-center justify-between gap-6">
           {/* Brand */}
           <div className="flex items-center gap-2 font-bold text-gray-900 dark:text-white">
-            <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-brand-600 text-white">
+            <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-brand-600 text-on-brand">
               <Code2 size={14} strokeWidth={2.5} />
             </span>
             <span>
@@ -61,7 +61,7 @@ export function Footer() {
       <a
         href="#hero"
         aria-label="Back to top"
-        className="absolute right-6 -top-5 flex items-center justify-center w-10 h-10 rounded-full bg-brand-600 hover:bg-brand-500 text-white shadow-glow transition-colors"
+        className="absolute right-6 -top-5 flex items-center justify-center w-10 h-10 rounded-full bg-brand-600 hover:bg-brand-500 text-on-brand shadow-glow transition-colors"
       >
         <ArrowUp size={18} />
       </a>

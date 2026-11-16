@@ -240,7 +240,7 @@ export function Projects() {
               className={cn(
                 "px-4 py-1.5 rounded-full text-sm font-medium transition-all duration-200",
                 activeFilter === filter
-                  ? "bg-brand-600 text-white shadow-glow"
+                  ? "bg-brand-600 text-on-brand shadow-glow"
                   : "bg-gray-100 dark:bg-white/5 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-white/10"
               )}
             >
