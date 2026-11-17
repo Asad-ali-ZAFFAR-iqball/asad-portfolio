@@ -25,7 +25,7 @@ import { personalInfo } from "@/data";
 import { cn } from "@/lib/utils";
 
 // ─── Form schema ───────────────────────────────────────────────────────────────
-// trim() so whitespace-only input fails; max() keeps the mailto URL short enough for mail apps.
+// trim() so whitespace-only input fails; max() keeps messages a sane size.
 const contactSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name must be 100 characters or less"),
   email: z.string().trim().email("Please enter a valid email address").max(200, "Email must be 200 characters or less"),
@@ -34,6 +34,9 @@ const contactSchema = z.object({
 });
 
 type ContactFormData = z.infer<typeof contactSchema>;
+
+// Set in .env.local / the host's env; inlined into the static build at build time.
+const WEB3FORMS_KEY = process.env.NEXT_PUBLIC_WEB3FORMS_KEY;
 
 // ─── Form field component ──────────────────────────────────────────────────────
 function Field({
@@ -131,8 +134,7 @@ const CONTACT_INFO = [
 ];
 
 export function Contact() {
-  // We can't know whether a mail app opened, so the form is never cleared automatically.
-  const [status, setStatus] = useState<"idle" | "opened" | "copied" | "copyFailed">("idle");
+  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error" | "copied" | "copyFailed">("idle");
   const reduceMotion = useReducedMotion();
 
   const {
@@ -149,10 +151,29 @@ export function Contact() {
 
 — ${data.name} (${data.email})`;
 
-  // Static site with no backend: hand the message to the visitor's email app, addressed to me.
-  const onSubmit = (data: ContactFormData) => {
-    window.location.href = `mailto:${personalInfo.email}?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(emailBody(data))}`;
-    setStatus("opened");
+  // Static site with no backend: Web3Forms emails the message to me. On failure the form keeps its data.
+  const onSubmit = async (data: ContactFormData) => {
+    setStatus("sending");
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: WEB3FORMS_KEY,
+          subject: `Portfolio: ${data.subject}`,
+          from_name: data.name,
+          name: data.name,
+          email: data.email, // Web3Forms sets this as Reply-To
+          message: data.message,
+        }),
+      });
+      const json = await res.json();
+      if (!res.ok || !json.success) throw new Error(json.message);
+      reset();
+      setStatus("sent");
+    } catch {
+      setStatus("error");
+    }
   };
 
   const copyMessage = async () => {
@@ -274,28 +295,35 @@ export function Contact() {
                     variant="primary"
                     className="bg-gradient-to-r from-brand-600 via-brand-500 to-violet-600 border-transparent"
                     size="md"
+                    isLoading={status === "sending"}
                     icon={<Send size={16} />}
                   >
                     Send Message
                   </Button>
                 </div>
 
-                {/* Status after "Send": the form keeps its data until the visitor clears it */}
+                {/* Status after "Send": on failure the form keeps its data until the visitor clears it */}
                 <div role="status" aria-live="polite">
-                  {status !== "idle" && (
+                  {status === "sent" && (
+                    <p className="mt-2 flex items-start gap-2 rounded-xl border border-brand-500/30 bg-brand-500/5 p-4 text-sm font-medium text-gray-900 dark:text-white">
+                      <CheckCircle2 size={16} aria-hidden className="mt-0.5 flex-shrink-0 text-brand-500" />
+                      Thanks! Your message has been sent. I&apos;ll get back to you soon.
+                    </p>
+                  )}
+                  {(status === "error" || status === "copied" || status === "copyFailed") && (
                     <div className="mt-2 rounded-xl border border-brand-500/30 bg-brand-500/5 p-4 text-sm text-gray-700 dark:text-gray-300">
                       <p className="flex items-start gap-2 font-medium text-gray-900 dark:text-white">
-                        {status === "copyFailed" ? (
-                          <AlertCircle size={16} aria-hidden className="mt-0.5 flex-shrink-0" />
-                        ) : (
+                        {status === "copied" ? (
                           <CheckCircle2 size={16} aria-hidden className="mt-0.5 flex-shrink-0 text-brand-500" />
+                        ) : (
+                          <AlertCircle size={16} aria-hidden className="mt-0.5 flex-shrink-0" />
                         )}
-                        {status === "opened" && "Your email app should open with this message. Press send there to deliver it."}
+                        {status === "error" && "Sorry, your message couldn't be sent. It's still in the form, so you can try again or copy it."}
                         {status === "copied" && `Message copied. Paste it into an email to ${personalInfo.email}.`}
                         {status === "copyFailed" && "Couldn't copy automatically. Your message is still in the form, so you can select and copy it."}
                       </p>
                       <p className="mt-2">
-                        Nothing opened? Copy the message or email me directly at{" "}
+                        You can also email me directly at{" "}
                         <a href={`mailto:${personalInfo.email}`} className="text-brand-600 dark:text-brand-400 underline">
                           {personalInfo.email}
                         </a>

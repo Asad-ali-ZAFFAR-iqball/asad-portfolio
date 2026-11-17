@@ -67,4 +67,17 @@ export const skillCategories: SkillCategory[] = [
       { name: "Slack", level: "Advanced", proficiency: 82 },
     ],
   },
+  {
+    id: "ai",
+    category: "AI-Assisted Development",
+    icon: "sparkles",
+    color: "from-brand-500 to-brand-700",
+    skills: [
+      { name: "Claude Code", level: "Advanced", proficiency: 88 },
+      { name: "ChatGPT", level: "Advanced", proficiency: 88 },
+      { name: "OpenAI Codex", level: "Advanced", proficiency: 82 },
+      { name: "OpenCode", level: "Proficient", proficiency: 78 },
+      { name: "Prompt Engineering", level: "Advanced", proficiency: 85 },
+    ],
+  },
 ];

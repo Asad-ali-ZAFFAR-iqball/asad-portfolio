@@ -9,6 +9,7 @@ import {
   Cloud,
   Zap,
   ShieldCheck,
+  Sparkles,
 } from "lucide-react";
 import { skillCategories } from "@/data";
 import { SectionHeader } from "@/components/ui/SectionHeader";
@@ -24,6 +25,7 @@ const ICON_MAP: Record<string, React.ReactNode> = {
   cloud: <Cloud size={20} />,
   zap: <Zap size={20} />,
   "shield-check": <ShieldCheck size={20} />,
+  sparkles: <Sparkles size={20} />,
 };
 
 function SkillBar({
@@ -136,7 +138,7 @@ export function Skills() {
         <SectionHeader
           eyebrow="Technical Skills"
           title="The toolkit behind the craft."
-          description="Backend, frontend, database and DevOps tools used daily on real-world production applications."
+          description="Backend, frontend, database, DevOps and AI tools used daily on real-world production applications."
         />
 
         <div className="grid lg:grid-cols-[300px_1fr] gap-8">
